@@ -15,11 +15,6 @@ public abstract class AbstractService<T, ID extends Serializable> implements Bas
 	public int deleteById(ID id) {
 		return baseMapper.deleteById(id);
 	}
-	
-	@Override
-	public int deleteByIds(String ids) {
-		return 1;
-	}
 
 //	@Override
 //	public int insertSelective(T record) {
@@ -32,8 +27,8 @@ public abstract class AbstractService<T, ID extends Serializable> implements Bas
 	}
 
 	@Override
-	public List<T> selectAll4Page(Map<String, Object> map) {
-		return baseMapper.selectAll4Page(map);
+	public List<T> selectAllByCondition(Map<String, Object> map) {
+		return baseMapper.selectAllByCondition(map);
 	}
 
 	@Override

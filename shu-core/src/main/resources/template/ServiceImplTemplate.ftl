@@ -40,7 +40,7 @@ public class ${className}ServiceImpl extends AbstractService<${className}, Integ
 	
 	@Override
 	@Transactional
-	public int deleteById(String ids) {
+	public int deleteByIds(String ids) {
 		String[] idsStr = ids.split(",");
 		if (idsStr.length > 0) {
 			for (String id : idsStr) {

@@ -43,10 +43,17 @@ public interface BaseMapper<T, ID extends Serializable> {
 	T selectById(ID id);
 	
 	/**
+	 * 分页查询所有(条件查询也能使用这个,不过为了解决翻译列表时的麻烦)
+	 * @param map
+	 * @return
+	 */
+	List<T> selectAll4Page(Map<String,Object> map);
+	
+	/**
 	 * 条件查询所有,也是分页查询(分页拦截的就是此语句) <br>
 	 * 如果条件查询和分页查询不同，则重新写个条件查询
 	 * @param map
 	 * @return
 	 */
-	List<T> selectAll4Page(Map<String,Object> map);
+	List<T> selectAllByCondition(Map<String,Object> map);
 }

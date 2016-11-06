@@ -10,6 +10,8 @@ public class AutoModel {
 	
 	/**数据库-类型*/
 	private String databaseType;
+	/**数据库名*/
+	private String databaseName;
 	/**数据库-驱动*/
 	private String diver;
 	/**数据库-连接url*/
@@ -39,12 +41,13 @@ public class AutoModel {
 	 * 生成jar时需要初始化sourceRoot,jspPath可以设置为""<br>
 	 * 生成war时需要初始化jspPath
 	 */
-	public AutoModel(String diver, String jdbcUrl, String username, String password, String tableName,
+	public AutoModel(String diver, String jdbcUrl, String username, String password, String databaseName, String tableName,
 			String sourceRoot, String jspPath, String appPackagePrefix, String appName) {
 		this.diver = diver;
 		this.jdbcUrl = jdbcUrl;
 		this.username = username;
 		this.password = password;
+		this.databaseName = databaseName;
 		this.tableName = tableName;
 		this.sourceRoot = sourceRoot;
 		this.jspPath = jspPath;
@@ -60,6 +63,14 @@ public class AutoModel {
 		this.databaseType = databaseType;
 	}
 	
+	public String getDatabaseName() {
+		return databaseName;
+	}
+
+	public void setDatabaseName(String databaseName) {
+		this.databaseName = databaseName;
+	}
+
 	public String getDiver() {
 		return diver;
 	}

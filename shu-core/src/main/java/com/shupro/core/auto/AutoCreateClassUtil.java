@@ -21,7 +21,7 @@ public class AutoCreateClassUtil {
 	 */
 	public static void generate2Jar(AutoModel autoModel) {
 		CreateBean createBean = new CreateBean(autoModel.getDiver(), autoModel.getJdbcUrl(), autoModel.getUsername(),
-				autoModel.getPassword());
+				autoModel.getPassword(), autoModel.getDatabaseName());
 		
 		String tableName = autoModel.getTableName();
 		String str = WordUtils.capitalizeFully(tableName, '_');// 在规则地方转换
@@ -71,7 +71,7 @@ public class AutoCreateClassUtil {
 	 */
 	public static void generate2War(AutoModel autoModel) {
 		CreateBean createBean = new CreateBean(autoModel.getDiver(), autoModel.getJdbcUrl(), autoModel.getUsername(),
-				autoModel.getPassword());
+				autoModel.getPassword(), autoModel.getDatabaseName());
 		
 		String tableName = autoModel.getTableName();
 		String str = WordUtils.capitalizeFully(tableName, '_');// 在规则地方转换

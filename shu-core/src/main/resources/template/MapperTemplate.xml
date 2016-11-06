@@ -18,7 +18,22 @@
 		 ${SQL.columnFields}
 	</sql>
    
-	<!-- 动态查询条件 -->
+	<!-- 动态分页查询条件 -->
+	<sql id="Page_Where_Clause">
+	where 1=1
+	<trim suffixOverrides="," >
+	<#list columnDatas as item >
+		<#-- 这里是生成if语句，不是freemarker的if语法 -->
+		<if test="${item.columnName} != null and ${item.columnName} != '' ">
+			<#-- freemarker的语法宏命令，使用部分-->
+		    and ${item.columnName} = <@mapperEl item.columnName/>
+		</if>
+	</#list>
+	
+	</trim>
+	</sql>
+	
+	<!-- 动态条件查询条件 -->
 	<sql id="Example_Where_Clause">
 	where 1=1
 	<trim suffixOverrides="," >
@@ -38,8 +53,16 @@
 		${SQL.selectById}
 	</select>
 
-	<!-- 条件查询所有(分页拦截的也是这个语句) -->
+	<!-- 分页查询所有(条件查询也能使用这个,不过为了解决翻译列表时的麻烦) -->
 	<select id="selectAll4Page" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from ${tableName}
+		<include refid="Page_Where_Clause"/>
+	</select>
+
+	<!-- 条件查询所有 -->
+	<select id="selectAllByCondition" resultMap="BaseResultMap" parameterType="java.util.Map">
 		select
 		<include refid="Base_Column_List" />
 		from ${tableName}
@@ -48,12 +71,12 @@
    
 	<!-- 插入记录 -->
 	<insert id="insert" parameterType="${bussPackage}.model.${className}" >
-	  ${SQL.insert}
+	  	${SQL.insert}
 	</insert>
 
 	<!-- 根据id，修改记录-->  
 	 <update id="update" parameterType="${bussPackage}.model.${className}" >
-	  ${SQL.update}
+	  	${SQL.update}
 	 </update>
  
 	 <!-- 动态修改记录，只修改只不为空的字段 -->

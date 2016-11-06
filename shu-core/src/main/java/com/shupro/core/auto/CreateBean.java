@@ -20,27 +20,33 @@ import org.apache.commons.lang3.StringUtils;
 import com.shupro.core.utils.db.JdbcUtil;
 
 public class CreateBean {
-	
+
 	private String driver;
 	private String url;
 	private String username;
 	private String password;
-	
-	/*换行+空位符*/
+	private String databaseName;
+
+	/* 换行+空位符 */
 	static String rt = "\r\n\t";
+	/* 空位符 */
+	private String space_1t = "\t";
+	private String space_2t = "\t\t";
+	private String space_3t = "\t\t\t";
 	String SQLTables = "show tables";
 	private String method;
 	private String argv;
-//	static String selectStr;
-//	static String from;
+	// static String selectStr;
+	// static String from;
 
-	public CreateBean(String driver, String url, String username, String password) {
+	public CreateBean(String driver, String url, String username, String password, String databaseName) {
 		this.driver = driver;
 		this.url = url;
 		this.username = username;
 		this.password = password;
+		this.databaseName = databaseName;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -51,19 +57,20 @@ public class CreateBean {
 		Connection conn = JdbcUtil.getConn(driver, url, username, password);
 		PreparedStatement ps = conn.prepareStatement(this.SQLTables);
 		ResultSet rs = ps.executeQuery();
-		
+
 		List<String> list = new ArrayList<>();
 		while (rs.next()) {
 			String tableName = rs.getString(1);
 			list.add(tableName);
 		}
-		
+
 		JdbcUtil.releaseConn(conn, ps, rs);
 		return list;
 	}
-	
+
 	/**
 	 * 获取表字段
+	 * 
 	 * @param tableName
 	 * @return
 	 * @throws SQLException
@@ -72,8 +79,8 @@ public class CreateBean {
 	public List<ColumnData> getColumnDatas(String tableName) throws SQLException, ClassNotFoundException {
 
 		String SQLColumns = "select column_name ,data_type,column_comment,0,0,character_maximum_length,is_nullable nullable "
-				+ "from information_schema.columns where table_name =  '" + tableName + "' ";
-		// + "and table_schema = '" + CodeResourceUtil.DATABASE_NAME + "'";
+				+ "from information_schema.columns where table_name =  '" + tableName + "' " + "and table_schema = '"
+				+ databaseName + "'";
 
 		Connection conn = JdbcUtil.getConn(driver, url, username, password);
 		PreparedStatement ps = conn.prepareStatement(SQLColumns);
@@ -111,18 +118,19 @@ public class CreateBean {
 		JdbcUtil.releaseConn(conn, ps, rs);
 		return columnList;
 	}
-	
+
 	/**
 	 * 查询表里面的字段
+	 * 
 	 * @param tableName
 	 * @return
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
 	public String getBeanFeilds(String tableName) throws SQLException, ClassNotFoundException {
-	
+
 		List<ColumnData> dataList = getColumnDatas(tableName);
-		
+
 		StringBuffer str = new StringBuffer();
 		StringBuffer getset = new StringBuffer();
 		for (Iterator<ColumnData> localIterator = dataList.iterator(); localIterator.hasNext();) {
@@ -130,23 +138,24 @@ public class CreateBean {
 			String name = d.getColumnName();
 			String type = d.getDataType();
 			String comment = d.getColumnComment();
-			
+
 			String maxChar = name.substring(0, 1).toUpperCase();
 			str.append(rt).append("private ").append(type + " ").append(name).append(";// ").append(comment);
 			String method = maxChar + name.substring(1, name.length());
-			getset.append(rt).append("public ").append(type + " ").append("get" + method + "() {\r\n\t");
-			getset.append("    return this.").append(name).append(";\r\n\t}");
-			getset.append(rt).append("public void ").append("set" + method + "(" + type + " " + name + ") {\r\n\t");
-			getset.append("    this." + name + "=").append(name).append(";\r\n\t}");
+			getset.append(rt).append("public ").append(type + " ").append("get" + method + "() {" + rt);
+			getset.append("    return this.").append(name).append(";" + rt + "}");
+			getset.append(rt).append("public void ").append("set" + method + "(" + type + " " + name + ") {" + rt);
+			getset.append("    this." + name + "=").append(name).append(";" + rt + "}");
 		}
 		this.argv = str.toString();
 		this.method = getset.toString();
-		
+
 		return this.argv + this.method;
 	}
-	
+
 	/**
 	 * 生成easyui需要的类型
+	 * 
 	 * @param columnt
 	 */
 	private void formatFieldClassType(ColumnData columnt) {
@@ -159,48 +168,52 @@ public class CreateBean {
 		easyuiTypeMap.put("datetime", "easyui-datetimebox");
 		easyuiTypeMap.put("time", "easyui-datetimebox");
 		easyuiTypeMap.put("date", "easyui-datebox");
-		
+
 		String fieldType = columnt.getColumnType();
 		String classType = easyuiTypeMap.get(fieldType);
 		if (classType == null) {
 			classType = "easyui-textbox";
 		}
 		columnt.setClassType(classType);
-		
-		if ("N".equals(columnt.getNullable())){
+
+		if ("N".equals(columnt.getNullable())) {
 			columnt.setOptionType("required:true");
 		}
-		//由于easyui-numberbox的precision属性默认值是2
-		
-//		String fieldType = columnt.getColumnType();
-//		String scale = columnt.getScale();
-//		if (("datetime".equals(fieldType)) || ("time".equals(fieldType))) {
-//			columnt.setClassType("easyui-datetimebox");
-//		} else if ("date".equals(fieldType)) {
-//			columnt.setClassType("easyui-datebox");
-//		} else if ("int".equals(fieldType)) {
-//			columnt.setClassType("easyui-numberbox");
-//		} else if ("number".equals(fieldType)) {
-//			columnt.setClassType("easyui-numberbox");
-//			if ((StringUtils.isNotBlank(scale)) && (Integer.parseInt(scale) > 0)) {
-//				if (StringUtils.isNotBlank(columnt.getOptionType())) {
-//					columnt.setOptionType(columnt.getOptionType() + "," + "precision:2,groupSeparator:','");
-//				} else {
-//					columnt.setOptionType("precision:2,groupSeparator:','");
-//				}
-//			}
-//		} else if (("float".equals(fieldType)) || ("double".equals(fieldType)) || ("decimal".equals(fieldType))) {
-//			columnt.setClassType("easyui-numberbox");
-//			if (StringUtils.isNotBlank(columnt.getOptionType())){
-//				columnt.setOptionType(columnt.getOptionType() + "," + "precision:2,groupSeparator:','");
-//			}else{
-//				columnt.setOptionType("precision:2,groupSeparator:','");
-//			}
-//		} else {
-//			columnt.setClassType("easyui-textbox");
-//		}
+		// 由于easyui-numberbox的precision属性默认值是2
+
+		// String fieldType = columnt.getColumnType();
+		// String scale = columnt.getScale();
+		// if (("datetime".equals(fieldType)) || ("time".equals(fieldType))) {
+		// columnt.setClassType("easyui-datetimebox");
+		// } else if ("date".equals(fieldType)) {
+		// columnt.setClassType("easyui-datebox");
+		// } else if ("int".equals(fieldType)) {
+		// columnt.setClassType("easyui-numberbox");
+		// } else if ("number".equals(fieldType)) {
+		// columnt.setClassType("easyui-numberbox");
+		// if ((StringUtils.isNotBlank(scale)) && (Integer.parseInt(scale) > 0))
+		// {
+		// if (StringUtils.isNotBlank(columnt.getOptionType())) {
+		// columnt.setOptionType(columnt.getOptionType() + "," +
+		// "precision:2,groupSeparator:','");
+		// } else {
+		// columnt.setOptionType("precision:2,groupSeparator:','");
+		// }
+		// }
+		// } else if (("float".equals(fieldType)) ||
+		// ("double".equals(fieldType)) || ("decimal".equals(fieldType))) {
+		// columnt.setClassType("easyui-numberbox");
+		// if (StringUtils.isNotBlank(columnt.getOptionType())){
+		// columnt.setOptionType(columnt.getOptionType() + "," +
+		// "precision:2,groupSeparator:','");
+		// }else{
+		// columnt.setOptionType("precision:2,groupSeparator:','");
+		// }
+		// } else {
+		// columnt.setClassType("easyui-textbox");
+		// }
 	}
-	
+
 	/**
 	 * 生成Java数据类型
 	 * 
@@ -211,9 +224,9 @@ public class CreateBean {
 	 */
 	public String getType(String dataType, String precision, String scale) {
 		Map<String, String> typeMap = new HashMap<>();
-//		typeMap.put("char", "String");
-//		typeMap.put("varchar", "String");
-//		typeMap.put("nvarchar", "String");
+		// typeMap.put("char", "String");
+		// typeMap.put("varchar", "String");
+		// typeMap.put("nvarchar", "String");
 		typeMap.put("int", "Integer");
 		typeMap.put("bigint", "Integer");
 		typeMap.put("float", "Float");
@@ -223,77 +236,78 @@ public class CreateBean {
 		typeMap.put("datetime", "java.util.Date");
 		typeMap.put("time", "java.sql.Timestamp");
 		typeMap.put("clob", "java.sql.Clob");
-		
+
 		String key = dataType.toLowerCase();
-		if (key.contains("char")){
+		if (key.contains("char")) {
 			dataType = "String";
-		}else if (key.contains("number")){
+		} else if (key.contains("number")) {
 			if ((StringUtils.isNotBlank(scale)) && (Integer.parseInt(scale) > 0))
 				dataType = "java.math.BigDecimal";
 			else if ((StringUtils.isNotBlank(precision)) && (Integer.parseInt(precision) > 6))
 				dataType = "Long";
 			else
 				dataType = "Integer";
-		}else{
+		} else {
 			dataType = typeMap.get(key);
 		}
-		
+
 		return dataType;
 	}
-	
-	public void getPackage(int type, String createPath, String content, String packageName, String className, String extendsClassName,
-			String[] importName) throws Exception {
-	
+
+	public void getPackage(int type, String createPath, String content, String packageName, String className,
+			String extendsClassName, String[] importName) throws Exception {
+
 		if (packageName == null)
 			packageName = "";
-		
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("package ").append(packageName).append(";\r\n");
 		sb.append("\r\n");
 		for (int i = 0; i < importName.length; ++i)
 			sb.append("import ").append(importName[i]).append(";\r\n");
-		
+
 		sb.append("\r\n");
-		sb.append("/**\r\n *  entity. @author wolf Date:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\r\n */");
+		sb.append("/**\r\n *  entity. @author wolf Date:"
+				+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\r\n */");
 		sb.append("\r\n");
 		sb.append("\r\npublic class ").append(className);
 		if (extendsClassName != null)
 			sb.append(" extends ").append(extendsClassName);
-		
+
 		if (type == 1)
 			sb.append(" ").append("implements java.io.Serializable {\r\n");
 		else
 			sb.append(" {\r\n");
-		
+
 		sb.append(rt);
 		sb.append("private static final long serialVersionUID = 1L;\r\n\t");
 		String temp = className.substring(0, 1).toLowerCase();
 		temp = temp + className.substring(1, className.length());
 		if (type == 1)
 			sb.append("private " + className + " " + temp + "; // entity ");
-		
+
 		sb.append(content);
 		sb.append("\r\n}");
 		System.out.println(sb.toString());
 		createFile(createPath, "", sb.toString());
 	}
-	
+
 	public void createFile(String path, String fileName, String str) throws IOException {
-	
+
 		FileWriter writer = new FileWriter(new File(path + fileName));
 		writer.write(new String(str.getBytes("utf-8")));
 		writer.flush();
 		writer.close();
 	}
-	
+
 	public Map<String, Object> getAutoCreateSql(String tableName) throws Exception {
-	
+
 		Map<String, Object> sqlMap = new HashMap<>();
 		List<ColumnData> columnDatas = getColumnDatas(tableName);
 		String columns = getColumnSplit(columnDatas);
 		String[] columnList = getColumnList(columns);
 		String columnFields = getColumnFields(columns);
-		String insert = "insert into " + tableName + "(" + columns.replaceAll("\\|", ",") + ")\n values(#{"
+		String insert = "insert into " + tableName + "(" + columns.replaceAll("\\|", ",") + ")\n\t\t values(#{"
 				+ columns.replaceAll("\\|", "},#{") + "})";
 		String update = getUpdateSql(tableName, columnList);
 		String updateSelective = getUpdateSelectiveSql(tableName, columnDatas);
@@ -306,90 +320,91 @@ public class CreateBean {
 		sqlMap.put("delete", delete);
 		sqlMap.put("updateSelective", updateSelective);
 		sqlMap.put("selectById", selectById);
-		
+
 		return sqlMap;
 	}
-	
+
 	public String getDeleteSql(String tableName, String[] columnsList) throws SQLException {
-	
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("delete from ");
 		sb.append(tableName).append(" where ");
 		sb.append(columnsList[0]).append(" = #{").append(columnsList[0]).append("}");
 		return sb.toString();
 	}
-	
+
 	public String getSelectByIdSql(String tableName, String[] columnsList) throws SQLException {
-	
+
 		StringBuffer sb = new StringBuffer();
 		sb.append("select <include refid=\"Base_Column_List\" /> \n");
-		sb.append("\t from ").append(tableName).append(" where ");
+		sb.append(space_2t + "from ").append(tableName).append("\n"+ space_2t +"where ");
 		sb.append(columnsList[0]).append(" = #{").append(columnsList[0]).append("}");
 		return sb.toString();
 	}
-	
+
 	public String getColumnFields(String columns) throws SQLException {
-	
+
 		String fields = columns;
 		if ((fields != null) && (!("".equals(fields))))
 			fields = fields.replaceAll("[|]", ",");
-		
+
 		return fields;
 	}
-	
+
 	public String[] getColumnList(String columns) throws SQLException {
-	
+
 		String[] columnList = columns.split("[|]");
 		return columnList;
 	}
-	
+
 	public String getUpdateSql(String tableName, String[] columnsList) throws SQLException {
-	
+
 		StringBuffer sb = new StringBuffer();
-		
+
 		for (int i = 1; i < columnsList.length; ++i) {
 			String column = columnsList[i];
 			if ("CREATETIME".equals(column.toUpperCase()))
 				continue;
-			
+
 			if ("UPDATETIME".equals(column.toUpperCase()))
 				sb.append(column + "=now()");
 			else
 				sb.append(column + "=#{" + column + "}");
-			
+
 			if (i + 1 < columnsList.length)
 				sb.append(",");
 		}
-		
-		String update = "update " + tableName + " set " + sb.toString() + "\n where " + columnsList[0] + "=#{" + columnsList[0] + "}";
+
+		String update = "update " + tableName + " set " + sb.toString() + "\n" + space_2t + "where " + columnsList[0] + "=#{"
+				+ columnsList[0] + "}";
 		return update;
 	}
-	
+
 	public String getUpdateSelectiveSql(String tableName, List<ColumnData> columnList) throws SQLException {
-	
+
 		StringBuffer sb = new StringBuffer();
 		ColumnData cd = (ColumnData) columnList.get(0);
-		sb.append("\t<trim  suffixOverrides=\",\" >\n");
+		sb.append(space_2t + "<trim  suffixOverrides=\",\" >\n");
 		for (int i = 1; i < columnList.size(); ++i) {
 			ColumnData data = (ColumnData) columnList.get(i);
 			String columnName = data.getColumnName();
-			sb.append("\t<if test=\"").append(columnName).append(" != null ");
-			
+			sb.append(space_3t + "<if test=\"").append(columnName).append(" != null ");
+
 			if ("String" == data.getDataType())
-				sb.append(" and ").append(columnName).append(" != ''");
-			
-			sb.append(" \">\n\t\t");
-			sb.append(columnName + "=#{" + columnName + "},\n");
-			sb.append("\t</if>\n");
+				sb.append("and ").append(columnName).append(" != ''");
+
+			sb.append(" \">\n");
+			sb.append(space_3t + "\t" +columnName + "=#{" + columnName + "},\n");
+			sb.append(space_3t + "</if>\n");
 		}
-		sb.append("\t</trim>");
-		String update = "update " + tableName + " set \n" + sb.toString() + "\n  where " + cd.getColumnName() + "=#{" + cd.getColumnName()
-				+ "}";
+		sb.append(space_2t + "</trim>");
+		String update = "update " + tableName + " set \n" + sb.toString() + "\n" + space_2t + "where " + cd.getColumnName() + "=#{"
+				+ cd.getColumnName() + "}";
 		return update;
 	}
-	
+
 	public String getColumnSplit(List<ColumnData> columnList) throws SQLException {
-	
+
 		StringBuffer commonColumns = new StringBuffer();
 		for (Iterator<ColumnData> localIterator = columnList.iterator(); localIterator.hasNext();) {
 			ColumnData data = localIterator.next();
