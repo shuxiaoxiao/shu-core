@@ -1,8 +1,6 @@
 package com.shupro.core.utils.http;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +9,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -23,10 +20,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-
-import com.shupro.core.utils.json.JsonUtil;
  
-public class HttpClientUtils {
+public class HttpClientUtils_old {
  
     private static PoolingHttpClientConnectionManager connectionManager = null;
     private static HttpClientBuilder httpBulder = null;
@@ -59,7 +54,7 @@ public class HttpClientUtils {
         HttpHost target = new HttpHost(ip, port);
         connectionManager.setMaxPerRoute(new HttpRoute(target), 20);
         CloseableHttpClient httpClient = httpBulder.build();
-        httpClient = httpBulder.build();
+       
         return httpClient;
     }
     
@@ -72,7 +67,7 @@ public class HttpClientUtils {
     	HttpHost target = new HttpHost(url);
     	connectionManager.setMaxPerRoute(new HttpRoute(target), 20);
     	CloseableHttpClient httpClient = httpBulder.build();
-    	httpClient = httpBulder.build();
+    	
     	return httpClient;
     }
  
@@ -118,105 +113,43 @@ public class HttpClientUtils {
     }
     
     /**
-     * 
-     * @param map 参数
-     * @param url 方法名
+     * 获得返回结果String
+     * @param map
+     * @param url 路径
      * @param method 请求方式
      * @return
-     * @throws ClientProtocolException
-     * @throws IOException
+     * @throws Exception
      */
-    public static HttpResponse getHttpResponse(Map<String, Object> map, String url, String method) throws ClientProtocolException, IOException {
-    	
-    	HttpClient client = getConnection(url);
+	public static String getResult(Map<String, Object> map, String url, String method) throws Exception {
+		String message = "";
+		
+		HttpClient client = getConnection(url);
     	HttpUriRequest reqMethod = getRequestMethod(map, url, method);
     	HttpResponse response = client.execute(reqMethod);
-    	
-    	return response;
-    }
-//    /**
-//     * 
-//     * @param map 参数
-//     * @param url 方法名
-//     * @param method 请求方式
-//     * @return
-//     * @throws ClientProtocolException
-//     * @throws IOException
-//     */
-//    public static HttpResponse getHttpResponse(Map<String, String> map, String urlRoot, String url, String method) throws ClientProtocolException, IOException {
-////    	ReadProperties readProperties=new ReadProperties();
-////		String urlRoot = readProperties.readProperties("payms.url");
-//    	String url2 = urlRoot;
-//    	if(urlRoot.startsWith("http://")){
-//    		//substring(start,end)索引从0开始，[start,end),end没有默认是str.length()
-//    		url2 = urlRoot.substring(7);
-//    	}else if(urlRoot.startsWith("https://")){
-//    		url2 = urlRoot.substring(8);
-//    	}
-//    	String ip = url2.substring(0, url2.indexOf(':'));
-//    	String port = url2.substring(url2.indexOf(':')+1,url2.indexOf('/'));
-//    	
-//    	HttpClient client = getConnection(ip,Integer.parseInt(port));
-//    	String urlPath = urlRoot + url;
-//    	HttpUriRequest post = getRequestMethod(map, urlPath, method);
-//    	HttpResponse response = client.execute(post);
-//    	
-//    	return response;
-//    }
-    
-    /**
-     * 获得返回结果
-     * @param map
-     * @param string
-     * @param string2
-     * @param string3
-     * @return
-     */
-	public static Map<String, Object> getResult(Map<String, Object> map, String url, String method) throws Exception {
-		Map<String, Object> resultMap = null;
-		
-		HttpResponse response = getHttpResponse(map, url, method);
 		if (response.getStatusLine().getStatusCode() == 200) {
 		    HttpEntity entity = response.getEntity();
-		    String message = EntityUtils.toString(entity, "utf-8");
-		    resultMap = JsonUtil.jsonStr2Map(message);
+		    message = EntityUtils.toString(entity, "utf-8");
 		} else {
 		    System.out.println("请求失败");
 		}
 		
-		return resultMap;
+		return message;
+	}
+	
+	public static String doGet(String url) throws Exception {
+		return getResult(null, url, "get");
 	}
     
-    //测试
-    public static void main(String args[]) throws Exception {
-        //post请求的参数
-    	Map<String, Object> map = new HashMap<>();
-    	String param ="{\"address\":\"四川省成都市双流区天府四街软件园\",\"area\":\"0\",\"city\":\"成都\",\"code\":\"028\",\"createtime\":\"2016-08-02 17:28:21\",\"deptname\":\"1919酒类直供\",\"id\":0,\"isprivate\":\"私有\",\"name\":\"天府四街仓库\",\"province\":\"四川省\",\"types\":\"标点\",\"updatetime\":\"2016-08-02 17:28:21\"}";
-        map.put("siteInfo", param);
-
-        Map<String, Object> resultMap = HttpClientUtils.getResult(map, "http://localhost:80/ws/addSite", "post");
-        System.out.println(resultMap);
-//        //完整示例
-//        String urlPath = "http://10.0.13.190:80/payms/cxfws/addCompany";
-//        HttpClient client = getConnection(urlPath);
-//        HttpUriRequest post = getRequestMethod(map, urlPath, "post");
-//        HttpResponse response = client.execute(post);
-//        if (response.getStatusLine().getStatusCode() == 200) {
-//            HttpEntity entity = response.getEntity();
-//            String message = EntityUtils.toString(entity, "utf-8");
-//            System.out.println(message);
-//            
-//            Map<String, Object> resultMap = JsonUtil.jsonStr2Map(message);
-//            boolean status = (boolean) resultMap.get("status");
-//            String msg = (String) resultMap.get("msg");
-//            if (!status) {
-//				throw new Exception(msg);
-//			}
-//            System.out.println(status);
-//        } else {
-//            System.out.println("请求失败");
-//        }
-        
-    }
+	public static String doGet(Map<String, Object> map, String url) throws Exception {
+		return getResult(map, url, "get");
+	}
+	
+	public static String doPost(String url) throws Exception {
+		return getResult(null, url, "post");
+	}
+	
+	public static String doPost(Map<String, Object> map, String url) throws Exception {
+		return getResult(map, url, "post");
+	}
 
 }

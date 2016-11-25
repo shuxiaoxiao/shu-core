@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.shupro.core.utils.lang.StringUtil;
+
 /**
  * 
  * BeanUtils.populate(obj, map); Map转成Bean

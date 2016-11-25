@@ -13,13 +13,15 @@ import java.math.BigDecimal;
  * @author shuheng
  */
 public class BigDecimalUtil {
-	//检查数字
-	private static String checkNum(String num) {
-		if ("".equals(num)) {
-			num = "0";
-		}
-		return num;
-	}
+	static final String DEFAULT_VALUE = "0";
+	static final String DEFAULT_VALUE_1 = "1";
+//	//检查数字
+//	private static String checkNum(String num) {
+//		if ("".equals(num)) {
+//			num = "0";
+//		}
+//		return num;
+//	}
 	
 	/**
 	 * 加法
@@ -31,11 +33,10 @@ public class BigDecimalUtil {
 	 * @return BigDecimal 返回类型
 	 */
 	public static BigDecimal add(String num1, String num2) {
-		num1 = checkNum(num1);
-		num2 = checkNum(num2);
+		num1 = StringUtil.parseEmpty(num1, DEFAULT_VALUE);
+		num2 = StringUtil.parseEmpty(num2, DEFAULT_VALUE);
 		BigDecimal bd1 = new BigDecimal(num1);
 		BigDecimal bd2 = new BigDecimal(num2);
-		// bd1.add(bd2).doubleValue();//获取double值
 		return bd1.add(bd2);
 	}
 
@@ -49,8 +50,8 @@ public class BigDecimalUtil {
 	 * @return BigDecimal 返回类型
 	 */
 	public static BigDecimal subtract(String num1, String num2) {
-		num1 = checkNum(num1);
-		num2 = checkNum(num2);
+		num1 = StringUtil.parseEmpty(num1, DEFAULT_VALUE);
+		num2 = StringUtil.parseEmpty(num2, DEFAULT_VALUE);
 		BigDecimal bd1 = new BigDecimal(num1);
 		BigDecimal bd2 = new BigDecimal(num2);
 		return bd1.subtract(bd2);
@@ -66,8 +67,8 @@ public class BigDecimalUtil {
 	 * @return BigDecimal 返回类型
 	 */
 	public static BigDecimal multiply(String num1, String num2) {
-		num1 = checkNum(num1);
-		num2 = checkNum(num2);
+		num1 = StringUtil.parseEmpty(num1, DEFAULT_VALUE);
+		num2 = StringUtil.parseEmpty(num2, DEFAULT_VALUE);
 		BigDecimal bd1 = new BigDecimal(num1);
 		BigDecimal bd2 = new BigDecimal(num2);
 		return bd1.multiply(bd2);
@@ -84,10 +85,8 @@ public class BigDecimalUtil {
 	 * @return BigDecimal 返回类型
 	 */
 	public static BigDecimal divide(String num1, String num2, int scale) {
-		num1 = checkNum(num1);
-		if ("".equals(num2)) {
-			num2 = "1";
-		}
+		num1 = StringUtil.parseEmpty(num1, DEFAULT_VALUE);
+		num2 = StringUtil.parseEmpty(num2, DEFAULT_VALUE_1);
 		BigDecimal bd1 = new BigDecimal(num1);
 		BigDecimal bd2 = new BigDecimal(num2);
 		return bd1.divide(bd2, scale, BigDecimal.ROUND_HALF_UP);
@@ -101,7 +100,7 @@ public class BigDecimalUtil {
 	 * @return
 	 */
 	public static BigDecimal round(BigDecimal num, int scale) {
-		return num.divide(new BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP);
+		return num.divide(new BigDecimal(DEFAULT_VALUE_1), scale, BigDecimal.ROUND_HALF_UP);
 	}
 
 	/**
@@ -112,9 +111,10 @@ public class BigDecimalUtil {
 	 * @return
 	 */
 	public static BigDecimal round(String num, int scale) {
-		num = checkNum(num);
+		num = StringUtil.parseEmpty(num, DEFAULT_VALUE);
 		BigDecimal bd1 = new BigDecimal(num);
-		return bd1.divide(new BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP);
+//		return bd1.divide(new BigDecimal(DEFAULT_VALUE_1), scale, BigDecimal.ROUND_HALF_UP);
+		return round(bd1, scale);
 	}
 
 }

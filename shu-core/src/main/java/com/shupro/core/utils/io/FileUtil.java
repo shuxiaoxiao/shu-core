@@ -178,6 +178,17 @@ public class FileUtil {
 //			e.printStackTrace();
 //		}
 //
+//		
+//		if (agent.contains("Firefox")) { // 火狐浏览器
+//			filename = "=?UTF-8?B?"
+//					+ new BASE64Encoder().encode(filename.getBytes("utf-8"))
+//					+ "?=";
+//			filename = filename.replaceAll("\r\n", "");
+//		} else { // IE及其他浏览器
+//			filename = URLEncoder.encode(filename, "utf-8");
+//			filename = filename.replace("+"," ");
+//		}
+//		return filename;
 //		return rtn;
 //	}
 
