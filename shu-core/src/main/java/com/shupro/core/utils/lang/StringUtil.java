@@ -9,24 +9,6 @@ import java.io.UnsupportedEncodingException;
  * @author shuheng
  */
 public class StringUtil {
-
-	/**
-	 * 获得32位长度的字符串
-	 * 
-	 * @Title: getUUId32
-	 * @param @return 设定文件
-	 * @return String 返回类型
-	 */
-	public static String getUUId32() {
-		// java.util.UUID 是jdk 提供的类
-		String str = java.util.UUID.randomUUID().toString();
-		// String uuids = str.substring(0, 8) + str.substring(9, 13)
-		// + str.substring(14, 18) + str.substring(19, 23)
-		// + str.substring(24);
-		// 方法二：与截取字符串的速度差不多
-		String uuids = str.replace("-", "");
-		return uuids;
-	}
 	
 	/**
 	 * 将ISO-8859-1格式 转为其他编码

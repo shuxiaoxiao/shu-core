@@ -6,21 +6,23 @@ import java.util.Map;
 
 import com.shupro.core.utils.page.PageBean;
 
-public interface BaseService<T, ID extends Serializable> {
+public interface BaseService<T> {
 //	void setBaseMapper();
 	/**
-	 * 删除
-	 * @param id	主键id
+	 * 通过主键id 删除
+	 * @param id
 	 * @return
 	 */
-	public int deleteById(ID id);
+	int deleteById(Serializable id);
+	//同类型的有数组重载时，不会被访问到
+//	int deleteById(Serializable[] idArr);
 	
 	/**
-	 * 批量删除(空实现)
-	 * @param ids	多个主键值，用","隔开
+	 * 批量删除,多个主键值用","隔开
+	 * @param ids
 	 * @return
 	 */
-	public int deleteByIds(String ids);
+	int deleteById(String ids);
 	
 	/**
 	 * 增加
@@ -50,7 +52,7 @@ public interface BaseService<T, ID extends Serializable> {
 	 * @param id	主键id
 	 * @return
 	 */
-	public T selectById(ID id);
+	public T selectById(Serializable id);
 
 	/**
 	 * 条件查询所有,也是分页查询(分页拦截的就是此语句) <br>

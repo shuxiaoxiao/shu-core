@@ -4,13 +4,20 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public interface BaseMapper<T, ID extends Serializable> {
+/**
+ * 需要使用的id为Serializable
+ * @author shu
+ *
+ * @param <T>
+ */
+public interface BaseMapper<T> {
+	
 	/**
 	 * 通过主键id 删除
 	 * @param id
 	 * @return
 	 */
-	int deleteById(ID id);
+	int deleteById(Serializable id);
 
 	/**
 	 * 新增
@@ -40,7 +47,7 @@ public interface BaseMapper<T, ID extends Serializable> {
 	 * @param id
 	 * @return
 	 */
-	T selectById(ID id);
+	T selectById(Serializable id);
 	
 	/**
 	 * 分页查询所有(条件查询也能使用这个,不过为了解决翻译列表时的麻烦)

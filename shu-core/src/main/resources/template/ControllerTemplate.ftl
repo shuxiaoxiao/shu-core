@@ -105,7 +105,7 @@ public class ${className}Controller {
     @ResponseBody
     public String delete(@PathVariable String ids){
     	try {
-    		${lowerName}Service.deleteById(ids);
+    		${lowerName}Service.deleteByIds(ids);
     		return "success";
     	} catch (Exception e) {
     		e.printStackTrace();
