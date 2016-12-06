@@ -88,5 +88,10 @@
 	<delete id="deleteById" parameterType="${bussPackage}.model.${className}" >
 		${SQL.delete}
 	</delete>
+
+	<!-- 批量删除记录 -->
+	<delete id="deleteByIds" parameterType="java.lang.Integer" >
+		${SQL.deleteByIds}
+	</delete>
   	
 </mapper>

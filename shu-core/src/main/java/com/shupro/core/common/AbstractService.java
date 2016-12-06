@@ -21,6 +21,11 @@ public abstract class AbstractService<T> implements BaseService<T> {
 	}
 	
 	@Override
+	public int deleteById(Serializable[] ids) {
+		return baseMapper.deleteByIds(ids);
+	}
+	
+	@Override
 	@Transactional
 	public int deleteById(String ids) {
 		String[] idsStr = ids.split(",");

@@ -18,6 +18,13 @@ public interface BaseMapper<T> {
 	 * @return
 	 */
 	int deleteById(Serializable id);
+	
+	/**
+	 * 通过主键id数组 删除(由于mapper里面不能重载)
+	 * @param id
+	 * @return
+	 */
+	int deleteByIds(Serializable[] ids);
 
 	/**
 	 * 新增

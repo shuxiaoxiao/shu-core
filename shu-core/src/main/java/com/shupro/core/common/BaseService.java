@@ -14,11 +14,16 @@ public interface BaseService<T> {
 	 * @return
 	 */
 	int deleteById(Serializable id);
-	//同类型的有数组重载时，不会被访问到
-//	int deleteById(Serializable[] idArr);
 	
 	/**
-	 * 批量删除,多个主键值用","隔开
+	 * 通过主键id数组 删除(底层是mybatis的foreach)
+	 * @param idArr
+	 * @return
+	 */
+	int deleteById(Serializable[] ids);
+	
+	/**
+	 * 批量删除,多个主键值用","隔开(底层是循环执行单条语句)
 	 * @param ids
 	 * @return
 	 */

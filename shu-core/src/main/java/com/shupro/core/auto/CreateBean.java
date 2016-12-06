@@ -29,10 +29,13 @@ public class CreateBean {
 
 	/* 换行+空位符 */
 	static String rt = "\r\n\t";
-	/* 空位符 */
+	/* 1个空位符 */
 	private String space_1t = "\t";
+	/* 2个空位符 */
 	private String space_2t = "\t\t";
+	/* 3个空位符 */
 	private String space_3t = "\t\t\t";
+	
 	String SQLTables = "show tables";
 	private String method;
 	private String argv;
@@ -90,7 +93,8 @@ public class CreateBean {
 		StringBuffer str = new StringBuffer();
 		StringBuffer getset = new StringBuffer();
 		while (rs.next()) {
-			String name = rs.getString(1).toLowerCase();
+//			String name = rs.getString(1).toLowerCase();//为了命名规则不转换
+			String name = rs.getString(1);
 			String type = rs.getString(2);
 			String comment = rs.getString(3);
 			String precision = rs.getString(4);
@@ -313,19 +317,33 @@ public class CreateBean {
 		String updateSelective = getUpdateSelectiveSql(tableName, columnDatas);
 		String selectById = getSelectByIdSql(tableName, columnList);
 		String delete = getDeleteSql(tableName, columnList);
+		String deleteByIds = getDeleteByIdsSql(tableName, columnList);
+		
 		sqlMap.put("columnList", columnList);
 		sqlMap.put("columnFields", columnFields);
 		sqlMap.put("insert", insert.replace("#{createTime}", "now()").replace("#{updateTime}", "now()"));
 		sqlMap.put("update", update.replace("#{createTime}", "now()").replace("#{updateTime}", "now()"));
 		sqlMap.put("delete", delete);
+		sqlMap.put("deleteByIds", deleteByIds);
 		sqlMap.put("updateSelective", updateSelective);
 		sqlMap.put("selectById", selectById);
 
 		return sqlMap;
 	}
 
-	public String getDeleteSql(String tableName, String[] columnsList) throws SQLException {
+	public String getDeleteByIdsSql(String tableName, String[] columnsList) throws SQLException {
 
+		StringBuffer sb = new StringBuffer();
+		sb.append("delete from ");
+		sb.append(tableName).append(" where ").append(columnsList[0]).append(" in ");
+		sb.append(rt).append("<foreach collection=\"array\" item=\"id\" open=\"(\" close=\")\" separator=\",\"> ");
+			sb.append(rt).append(" #{").append(columnsList[0]).append("}");
+		sb.append(rt).append("</foreach>");
+		return sb.toString();
+	}
+	
+	public String getDeleteSql(String tableName, String[] columnsList) throws SQLException {
+		
 		StringBuffer sb = new StringBuffer();
 		sb.append("delete from ");
 		sb.append(tableName).append(" where ");
