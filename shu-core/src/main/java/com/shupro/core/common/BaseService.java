@@ -24,6 +24,7 @@ public interface BaseService<T> {
 	
 	/**
 	 * 批量删除,多个主键值用","隔开(底层是循环执行单条语句)
+	 *【不推荐，性能不好，存在多次连库的操作】
 	 * @param ids
 	 * @return
 	 */

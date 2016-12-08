@@ -24,7 +24,7 @@ public class AutoCreateClassUtil {
 				autoModel.getPassword(), autoModel.getDatabaseName());
 		
 		String tableName = autoModel.getTableName();
-		String str = WordUtils.capitalizeFully(tableName, '_');// 在规则地方转换
+		String str = WordUtils.capitalizeFully(tableName, '_');// 在规则地方转换，首字母都转成大写
 		String className = str.replace("_", "");
 		String lowerName = WordUtils.uncapitalize(className);
 		

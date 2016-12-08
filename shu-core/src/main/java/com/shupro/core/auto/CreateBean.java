@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import com.shupro.core.utils.db.JdbcUtil;
 
@@ -27,14 +28,20 @@ public class CreateBean {
 	private String password;
 	private String databaseName;
 
-	/* 换行+空位符 */
-	static String rt = "\r\n\t";
+	/* 换行 */
+	private String rn = "\r\n";
 	/* 1个空位符 */
 	private String space_1t = "\t";
 	/* 2个空位符 */
 	private String space_2t = "\t\t";
 	/* 3个空位符 */
 	private String space_3t = "\t\t\t";
+	/* 4个空位符 */
+	private String space_4t = "\t\t\t\t";
+	/* 换行+空位符 */
+	private String rt = rn + space_1t;
+	/* 换行+2个空位符 */
+	private String rn2t = rn + space_2t;
 	
 	String SQLTables = "show tables";
 	private String method;
@@ -143,18 +150,22 @@ public class CreateBean {
 			String type = d.getDataType();
 			String comment = d.getColumnComment();
 
-			String maxChar = name.substring(0, 1).toUpperCase();
-			str.append(rt).append("private ").append(type + " ").append(name).append(";// ").append(comment);
-			String method = maxChar + name.substring(1, name.length());
-			getset.append(rt).append("public ").append(type + " ").append("get" + method + "() {" + rt);
-			getset.append("    return this.").append(name).append(";" + rt + "}");
-			getset.append(rt).append("public void ").append("set" + method + "(" + type + " " + name + ") {" + rt);
-			getset.append("    this." + name + "=").append(name).append(";" + rt + "}");
+			str.append(rt);//空一行
+			str.append("private ").append(type + " ").append(name).append(";// ").append(comment);
+//			String maxChar = name.substring(0, 1).toUpperCase();
+//			String method = maxChar + name.substring(1, name.length());
+			String method = WordUtils.capitalize(name);
+			getset.append(rt).append("public ").append(type + " ").append("get" + method + "() {");
+			getset.append(rt).append(space_1t).append("return this.").append(name).append(";");
+			getset.append(rt).append("}");
+			getset.append(rt).append("public void ").append("set" + method + "(" + type + " " + name + ") {");
+			getset.append(rt).append(space_1t).append("this." + name + "=").append(name).append(";");
+			getset.append(rt).append("}");
 		}
 		this.argv = str.toString();
 		this.method = getset.toString();
 
-		return this.argv + this.method;
+		return this.argv + rn + this.method;
 	}
 
 	/**
@@ -265,12 +276,12 @@ public class CreateBean {
 			packageName = "";
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("package ").append(packageName).append(";\r\n");
-		sb.append("\r\n");
-		for (int i = 0; i < importName.length; ++i)
-			sb.append("import ").append(importName[i]).append(";\r\n");
-
-		sb.append("\r\n");
+		sb.append("package ").append(packageName).append(";");
+		sb.append(rn + rn);
+		for (int i = 0; i < importName.length; ++i){
+			sb.append("import ").append(importName[i]).append(";").append(rn);
+		}
+		sb.append(rn);
 		sb.append("/**\r\n *  entity. @author wolf Date:"
 				+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "\r\n */");
 		sb.append("\r\n");
@@ -337,7 +348,7 @@ public class CreateBean {
 		sb.append("delete from ");
 		sb.append(tableName).append(" where ").append(columnsList[0]).append(" in ");
 		sb.append(rt).append("<foreach collection=\"array\" item=\"id\" open=\"(\" close=\")\" separator=\",\"> ");
-			sb.append(rt).append(" #{").append(columnsList[0]).append("}");
+		sb.append(rn2t).append(" #{").append(columnsList[0]).append("}");
 		sb.append(rt).append("</foreach>");
 		return sb.toString();
 	}
@@ -354,9 +365,9 @@ public class CreateBean {
 	public String getSelectByIdSql(String tableName, String[] columnsList) throws SQLException {
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("select <include refid=\"Base_Column_List\" /> \n");
-		sb.append(space_2t + "from ").append(tableName).append("\n"+ space_2t +"where ");
-		sb.append(columnsList[0]).append(" = #{").append(columnsList[0]).append("}");
+		sb.append("select <include refid=\"Base_Column_List\" />");
+		sb.append(rn).append(space_1t + "from ").append(tableName);
+		sb.append(rn + space_1t +"where ").append(columnsList[0]).append(" = #{").append(columnsList[0]).append("}");
 		return sb.toString();
 	}
 
@@ -393,7 +404,7 @@ public class CreateBean {
 				sb.append(",");
 		}
 
-		String update = "update " + tableName + " set " + sb.toString() + "\n" + space_2t + "where " + columnsList[0] + "=#{"
+		String update = "update " + tableName + " set " + sb.toString() + rn + space_2t + "where " + columnsList[0] + "=#{"
 				+ columnsList[0] + "}";
 		return update;
 	}
@@ -402,7 +413,8 @@ public class CreateBean {
 
 		StringBuffer sb = new StringBuffer();
 		ColumnData cd = (ColumnData) columnList.get(0);
-		sb.append(space_2t + "<trim  suffixOverrides=\",\" >\n");
+		sb.append(space_2t + "<trim  suffixOverrides=\",\" >");
+		sb.append(rn);
 		for (int i = 1; i < columnList.size(); ++i) {
 			ColumnData data = (ColumnData) columnList.get(i);
 			String columnName = data.getColumnName();
@@ -411,12 +423,13 @@ public class CreateBean {
 			if ("String" == data.getDataType())
 				sb.append("and ").append(columnName).append(" != ''");
 
-			sb.append(" \">\n");
-			sb.append(space_3t + "\t" +columnName + "=#{" + columnName + "},\n");
-			sb.append(space_3t + "</if>\n");
+			sb.append(" \">");
+			sb.append(rn + space_4t +columnName + "=#{" + columnName + "},");
+			sb.append(rn + space_3t + "</if>");
+			sb.append(rn);
 		}
 		sb.append(space_2t + "</trim>");
-		String update = "update " + tableName + " set \n" + sb.toString() + "\n" + space_2t + "where " + cd.getColumnName() + "=#{"
+		String update = "update " + tableName + " set " + rn + sb.toString() + rn + space_2t + "where " + cd.getColumnName() + "=#{"
 				+ cd.getColumnName() + "}";
 		return update;
 	}
