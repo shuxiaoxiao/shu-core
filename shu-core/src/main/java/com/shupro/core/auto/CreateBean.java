@@ -347,9 +347,9 @@ public class CreateBean {
 		StringBuffer sb = new StringBuffer();
 		sb.append("delete from ");
 		sb.append(tableName).append(" where ").append(columnsList[0]).append(" in ");
-		sb.append(rt).append("<foreach collection=\"array\" item=\"id\" open=\"(\" close=\")\" separator=\",\"> ");
-		sb.append(rn2t).append(" #{").append(columnsList[0]).append("}");
-		sb.append(rt).append("</foreach>");
+		sb.append(rn2t).append("<foreach collection=\"array\" item=\"id\" open=\"(\" close=\")\" separator=\",\"> ");
+		sb.append(rn).append(space_3t).append(" #{").append(columnsList[0]).append("}");
+		sb.append(rn2t).append("</foreach>");
 		return sb.toString();
 	}
 	

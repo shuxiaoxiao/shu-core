@@ -14,15 +14,6 @@ import java.util.Set;
 public class MapUtil {
 	
 	/**
-	 * map对象为空 或 map里面没有数据 就返回true
-	 * @param map
-	 * @return
-	 */
-    public static boolean isEmpty(Map map) {
-        return (map == null || map.isEmpty());
-    }
-    
-	/**
 	 * 获取map key的最小值<br>
 	 * 利用Arrays.sort排序(推荐)
 	 * Collections.sort(list),不能对进行排序set(通过循环将key放入list，然后排序)

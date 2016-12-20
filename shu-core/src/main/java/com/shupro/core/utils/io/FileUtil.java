@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.shupro.core.utils.lang.StringUtil;
+import com.shupro.core.utils.SystemUtil;
 
 
 /**
@@ -52,7 +52,7 @@ public class FileUtil {
 				if (file != null) {
 					String fileName = file.getOriginalFilename();
 					String path = request.getSession().getServletContext().getRealPath("upload");
-					newFileName = StringUtil.getNewFilename(fileName);
+					newFileName = SystemUtil.getNewFilename(fileName);
 					File targetFile = new File(path, newFileName);
 					if (!targetFile.exists()) {
 						targetFile.mkdirs();
@@ -87,7 +87,7 @@ public class FileUtil {
 				if (file != null) {
 					String fileName = file.getOriginalFilename();
 					String path = request.getSession().getServletContext().getRealPath(savePath);
-					newFileName = namePrefix + StringUtil.getNewFilename(fileName);
+					newFileName = namePrefix + SystemUtil.getNewFilename(fileName);
 					File targetFile = new File(path, newFileName);
 					if (!targetFile.exists()) {
 						targetFile.mkdirs();

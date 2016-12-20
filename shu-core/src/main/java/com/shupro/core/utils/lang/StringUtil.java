@@ -26,23 +26,6 @@ public class StringUtil {
 		}
 		return resultStr;
 	}
-
-	/**
-	 * 文件重命名，组成格式：当前日期（yyyyMMddHHmmss）+ 4位随机数
-	 * null表示重命名失败，无后缀
-	 * @Title: getNewFilename
-	 * @param @param oldFilename
-	 * @return String    返回类型
-	 */
-	public static String getNewFilename(String oldFilename) {
-//		String suffix = oldFilename.substring(oldFilename.lastIndexOf("."));
-		String name = DateUtil.todayStr() + MathUtil.random(1000,9999);
-		String suffix = getSuffix(oldFilename);
-		if(suffix != null){
-			return name + suffix;
-		}
-		return null;
-	}
 	
 	/**
 	 * 获得文件后缀,null表示无后缀

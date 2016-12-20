@@ -34,14 +34,23 @@ public class MathUtil {
 	}
 	
 	/**
-	 * 返回18位随机数, 组成格式：当前日期（yyyyMMddHHmmss）+ 4位随机数
+	 * 返回的几位数之间的值<br>
+	 * 如length=1,返回[0, 10) 即0-9之间的值<br>
+	 * 如length=2,返回[10, 100) 即10-99之间的值<br>
+	 * 如length=3,返回[100, 1000) 即100-999之间的值<br>
 	 * 
-	 * @Title: getNewFilename
-	 * @param @param oldFilename
-	 * @return String    返回类型
+	 * @param @param length	几位数
+	 * @return int
 	 */
-	public static String random() {
-		return DateUtil.todayStr() + MathUtil.random(1000,9999);
+	public static int random2(int length){
+		int start = 0;
+		if(length != 1){
+			//由于10^0 =1,所以单独处理
+			start = (int) Math.pow(10, (length - 1) );
+		}
+		int end = (int) Math.pow(10, length);
+		
+		return (int) (Math.random() * (end - start)) + start;
 	}
 	
 	/**
@@ -65,14 +74,13 @@ public class MathUtil {
 			System.out.println("求质数的范围range必须大于2！");
 			return null;
 		}
-		long startTime =System.currentTimeMillis();
+		
 		for (int i = startRange; i <= endRange; i++) {
 			if(isPrime(i)){
 				primeList.add(i);
 			}
 		}
-		long endTime =System.currentTimeMillis();
-		System.out.println(endTime - startTime);
+		
 		return primeList;
 	}
 

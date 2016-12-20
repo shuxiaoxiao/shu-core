@@ -55,11 +55,12 @@ public class AutoCreateClassUtil {
 			e.printStackTrace();
 		}
 		
-		CommonPageParser.WriterPage(root, "ModelTemplate.ftl", pckPath, beanPath);
-		CommonPageParser.WriterPage(root, "DaoTemplate.ftl", pckPath, mapperPath);
-		CommonPageParser.WriterPage(root, "MapperTemplate.xml", pckPath, sqlMapperPath);
-		CommonPageParser.WriterPage(root, "ServiceTemplate.ftl", pckPath, servicePath);
-		CommonPageParser.WriterPage(root, "ServiceImplTemplate.ftl", pckPath, serviceImplPath);
+		String templateRoot = "/template";
+		CommonPageParser.WriterPage(root, templateRoot, "ModelTemplate.ftl", pckPath, beanPath);
+		CommonPageParser.WriterPage(root, templateRoot, "DaoTemplate.ftl", pckPath, mapperPath);
+		CommonPageParser.WriterPage(root, templateRoot, "MapperTemplate.xml", pckPath, sqlMapperPath);
+		CommonPageParser.WriterPage(root, templateRoot, "ServiceTemplate.ftl", pckPath, servicePath);
+		CommonPageParser.WriterPage(root, templateRoot, "ServiceImplTemplate.ftl", pckPath, serviceImplPath);
 		
 		System.out.println("----------------------------代码jar部分生成完毕---------------------------");
 	}
@@ -69,7 +70,7 @@ public class AutoCreateClassUtil {
 	 * 
 	 * @param autoModel
 	 */
-	public static void generate2War(AutoModel autoModel) {
+	public static void generate2EasyuiWar(AutoModel autoModel) {
 		CreateBean createBean = new CreateBean(autoModel.getDiver(), autoModel.getJdbcUrl(), autoModel.getUsername(),
 				autoModel.getPassword(), autoModel.getDatabaseName());
 		
@@ -103,8 +104,9 @@ public class AutoCreateClassUtil {
 			e.printStackTrace();
 		}
 		
-		CommonPageParser.WriterPage(root, "ControllerTemplate.ftl", pckPath, controllerPath);
-		CommonPageParser.WriterPage(root, "jspTemplate.ftl", jspSrcPath, jspPath);
+		String templateRoot = "/template2Easyui";
+		CommonPageParser.WriterPage(root, templateRoot, "ControllerTemplate.ftl", pckPath, controllerPath);
+		CommonPageParser.WriterPage(root, templateRoot, "jspTemplate.ftl", jspSrcPath, jspPath);
 		
 		System.out.println("----------------------------代码war部分生成完毕---------------------------");
 	}

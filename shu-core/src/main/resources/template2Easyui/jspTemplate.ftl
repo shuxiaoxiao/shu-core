@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/commons/global.jsp" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <html>
   <head>
 	<title>组织结构管理</title>
@@ -9,7 +9,7 @@
   </head>
   
   <body>
-    <div class="easyui-layout" style="width:100%;height:100%;">
+    <div class="easyui-layout" data-options="fit:'true' ">
 		<div data-options="region:'north',split:true " style="height:40px;padding: 3px;">
 			<!--部门编号：<input type="text" id="query_deptid" />&nbsp;
 			-->
@@ -31,7 +31,7 @@
 		    		<tr>
 		    			<td class="form-td-left"> ${item.columnComment}:</td>
 		    			<td><input class="${item.classType} form-input" name="${item.columnName}" 
-		    				data-options="${item.optionType}" maxlength="${item.charmaxLength}" missingMessage="请填写${item.columnComment}" />
+		    				data-options="missingMessage:'请填写${item.columnComment}', ${item.optionType}" maxlength="${item.charmaxLength}" />
 		    			</td>
 		    		</tr>
 				</#if>
@@ -146,13 +146,11 @@
 	        	var result = JSON.parse(result);//Json对象
 	        	//var result = $.parseJSON(result);//jq对象
 	       	 	$.messager.progress('close');
-	            if (result=='success'){
+	       	 	if (result.code == 200){
 		        	$('#dlg').dialog('close');
 		        	$grid.datagrid('reload');
-	            }else if(result=='error'){
-	            	$.messager.alert('警告','保存失败');
 	            }else{
-	            	$.messager.alert('警告',result);
+	            	$.messager.alert('警告',result.message);
 	            }
 	        }
 		 });
@@ -176,23 +174,23 @@
 			                msg:'正在删除...'
 			            });
 	        		var ids = '';
-					for(var i =0 ;i<row.length;i++){
-						ids += row[i].id + ',' ;
+					for(var i = 0, max = row.length; i < max; i++){
+						ids += row[i].id + ',';
 					}
-					ids = ids.substring(0 , ids.length-1);
+					ids = ids.substring(0, ids.length-1);
 		            $.ajax({
-		            	url:'${r"${path}" }/${lowerName}/delete/'+ids,
-		            	dataType:"text",
-		        		success:function(data){
+		            	url:'${r"${path}" }/${lowerName}/delete',
+		            	type: 'post',
+		            	data: {"ids" : ids},
+		            	dataType:"json",
+		        		success:function(result){
 		        			$.messager.progress('close');
-		        			if (data=='success'){
+		        			if (result.code == 200){
 		                    	$grid.datagrid('reload');
 		                    	//清空idField(避免删除后在进行修改操作的bug)
 								$grid.datagrid('unselectAll');
-		                    }else if(data=='error'){
-		                    	$.messager.alert('警告','删除失败');
 		                    }else{
-		                    	$.messager.alert('警告',data);
+		                    	$.messager.alert('警告',result.message);
 		                    }
 		        		},
 		        		error:function(request,msg){

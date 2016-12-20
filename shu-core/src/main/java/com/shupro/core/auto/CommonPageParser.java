@@ -16,7 +16,7 @@ import freemarker.template.Template;
 
 public class CommonPageParser {
 
-	public static void WriterPage(Map<String, Object> root, String templateName, String fileDirPath, String targetFile){
+	public static void WriterPage(Map<String, Object> root, String templateRoot, String templateName, String fileDirPath, String targetFile){
 		 File file = null;
 		 BufferedWriter out = null;
 		try {
@@ -39,7 +39,7 @@ public class CommonPageParser {
     	  // 通过Freemaker的Configuration读取相应的ftl
           Configuration config = new Configuration();
           //"/template"相对于this的文件路径(bin文件夹[普通项目]或target/class文件夹[maven项目])
-          config.setClassForTemplateLoading(CommonPageParser.class, "/template");
+          config.setClassForTemplateLoading(CommonPageParser.class, templateRoot);
           
           // 在模板文件目录中找到名称为name的文件
           Template temp = config.getTemplate(templateName);

@@ -163,15 +163,51 @@ public class DateUtil {
 	}
 
 	/**
-	 * 获得当前时间的str格式，格式为yyyyMMddHHmmss(可以当成随机数)
+	 * 获得当前时间的str格式，格式为yyyyMMddHHmmss
 	 * 
 	 * @Title: todayStr
 	 * @param @return    设定文件
 	 * @return String    返回类型
 	 */
-	public static String todayStr() {
+	public static String today2YyyyMMddHHmmss() {
 		Date date = new Date();
 		return dateToStr(date, "yyyyMMddHHmmss");
+	}
+	
+	/**
+	 * 获得当前时间的str格式，格式为yyyyMMddHHmmssSSS
+	 * 
+	 * @Title: todayStr
+	 * @param @return    设定文件
+	 * @return String    返回类型
+	 */
+	public static String today2YyyyMMddHHmmssSSS() {
+		Date date = new Date();
+		return dateToStr(date, "yyyyMMddHHmmssSSS");
+	}
+	
+	/**
+	 * 获得当前时间的str格式，格式为yyMMddHHmmss
+	 * 
+	 * @Title: todayStr
+	 * @param @return    设定文件
+	 * @return String    返回类型
+	 */
+	public static String today2YyMMddHHmmss() {
+		Date date = new Date();
+		return dateToStr(date, "yyMMddHHmmss");
+	}
+	
+	/**
+	 * 获得当前时间的str格式，格式为yyMMddHHmmssSSS
+	 * 
+	 * @Title: todayStr
+	 * @param @return    设定文件
+	 * @return String    返回类型
+	 */
+	public static String today2YyMMddHHmmssSSS() {
+		Date date = new Date();
+		return dateToStr(date, "yyMMddHHmmssSSS");
 	}
 	
 	/**

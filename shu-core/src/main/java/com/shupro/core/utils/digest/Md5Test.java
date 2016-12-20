@@ -1,4 +1,4 @@
-package com.shupro.core.utils.md5;
+package com.shupro.core.utils.digest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
