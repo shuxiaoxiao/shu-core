@@ -23,7 +23,7 @@
 		<!-- 表单(放在layout里面，放在外面会影响grid的高度) -->
 		<div id="dlg" class="easyui-dialog" style="width:450px;height:360px;" 
 			data-options="closed:true, modal:true, left:100, top:50, buttons:'#dlg-buttons' ">
-	    	<form id="fm" method="post" novalidate>
+	    	<form id="fm" method="post" >
 	    		<input id="id" name="id" type="hidden">
 	    		<table class="form-table">
 		    <#list columnDatas as item >

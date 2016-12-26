@@ -1,5 +1,6 @@
 package com.shupro.core.utils.digest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -11,7 +12,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class DigestUtil {
 
 	/**
-	 * md5 加密，返回32位
+	 * md5 加密，返回32位（不可逆）
 	 * @param str
 	 * @return
 	 */
@@ -21,13 +22,35 @@ public class DigestUtil {
 	}
 	
 	/**
-	 * sha256 加密，返回64位
+	 * sha256 加密，返回64位（不可逆）
 	 * @param str
 	 * @return
 	 */
-	public String sha256(String str) {
+	public static String sha256(String str) {
 		
 		return DigestUtils.sha256Hex(str);
+	}
+	
+	/**
+	 * base64加密
+	 * @param str
+	 * @return
+	 */
+	public static String encodeBase64(String str){
+		byte[] b = Base64.encodeBase64(str.getBytes(), true);
+		
+		return new String(b);
+	}
+	
+	/**
+	 * base64解密
+	 * @param str
+	 * @return
+	 */
+	public static String decodeBase64(String str){
+		byte[] b = Base64.decodeBase64(str.getBytes());
+		
+		return new String(b);
 	}
 	
 }
