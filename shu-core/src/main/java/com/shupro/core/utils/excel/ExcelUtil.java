@@ -173,39 +173,19 @@ public class ExcelUtil {
 		Workbook workbook = createWorkbook(suffix);
 		// 建立新的sheet对象（excel的表单）
 		Sheet sheet = workbook.createSheet(excelInfo.getSheetName());
-		// 设置缺省列宽8.5,行高为设置的20
-		sheet.setDefaultRowHeightInPoints(20);
+//		//设置缺省列宽8.5,行高为设置的20
+//		sheet.setDefaultRowHeightInPoints(20);
 
-		// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
-		Row header = sheet.createRow(0);
-		header.setHeightInPoints(25);
-		// 创建单元格并设置单元格内容
 		String[] titles = excelInfo.getTitles();
-		for (int i = 0, max = titles.length; i < max; i++) {
-			header.createCell(i).setCellValue(titles[i]);
-		}
+		String[] fields = excelInfo.getFields();
+		setTitleRow(sheet, titles);
 		
 		//具体内容
 		List<Map<String, Object>> list = excelInfo.getList();
-		String[] fields = excelInfo.getFields();
 		if(list != null){
 			int size = list.size();
 			for (int i = 0; i < size; i++) {
-				//sheet.autoSizeColumn(i,true);//中文还是不能实现宽度自适应
-				Row row = sheet.createRow(i+1);
-//				row.setHeightInPoints(20);
-				for (int j = 0, max = fields.length; j < max; j++) {
-					String value = String.valueOf(list.get(i).get(fields[j]));
-					int cellLength = value.getBytes().length;
-					if(cellLength < 9){
-						cellLength = 9;
-					}
-					sheet.setColumnWidth(j,(cellLength + 1) * 256);//手动设置列宽
-					row.createCell(j).setCellValue(value);
-//					Cell cell = row.createCell(j);
-//					cell.setCellType(Cell.CELL_TYPE_STRING);
-//					cell.setCellValue(value);
-				}
+				setContentRows(sheet, i+1, list.get(i), fields, titles);
 			}
 		}
 		workbook.write(outStream);
@@ -237,39 +217,27 @@ public class ExcelUtil {
 		} else {
 			sheetNum = rows / pageSize + 1;
 		}
+		
 		for (int i = 1; i <= sheetNum; i++) {
 			// 建立新的sheet对象（excel的表单）
-			Sheet sheet = workbook.createSheet(excelInfo.getSheetName());
-			// 设置缺省列宽8.5,行高为设置的20
-			sheet.setDefaultRowHeightInPoints(20);
+			Sheet sheet = workbook.createSheet(excelInfo.getSheetName() + i);
+//			// 设置缺省列宽8.5,行高为设置的20
+//			sheet.setDefaultRowHeightInPoints(20);
 			
-			// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
-			Row header = sheet.createRow(0);
-			header.setHeightInPoints(25);
-			// 创建单元格并设置单元格内容
 			String[] titles = excelInfo.getTitles();
-			for (int t = 0, max = titles.length; t < max; t++) {
-				header.createCell(t).setCellValue(titles[t]);
-			}
-			
-			
 			String[] fields = excelInfo.getFields();
-			if(list != null){
-				int size = list.size();
-				for (int s = 0; s < size; s++) {
-					//sheet.autoSizeColumn(i,true);//中文还是不能实现宽度自适应
-					Row row = sheet.createRow(s+1);
-//				row.setHeightInPoints(20);
-					for (int j = 0, max = fields.length; j < max; j++) {
-						String value = String.valueOf(list.get(s).get(fields[j]));
-						int cellLength = value.getBytes().length;
-						if(cellLength < 9){
-							cellLength = 9;
-						}
-						sheet.setColumnWidth(j,(cellLength + 1) * 256);//手动设置列宽
-						row.createCell(j).setCellValue(value);
-					}
+			setTitleRow(sheet, titles);
+			
+			//分页处理内容
+			int end = Math.min(pageSize, rows);
+			for (int s = 0; s < end; s++) {
+				int pageCount = (i -1) * pageSize;
+				int start = pageCount + s;
+				if (start >= rows){
+					//如果数据超出总的记录数的时候，就退出循环
+					break;
 				}
+				setContentRows(sheet, s+1, list.get(start), fields, titles);
 			}
 		}
 		workbook.write(outStream);
@@ -297,6 +265,50 @@ public class ExcelUtil {
 			write2Page(excelInfo, output);
 		}else{
 			write(excelInfo, output);
+		}
+	}
+
+	/**
+	 * 填充标题行
+	 * @param sheet
+	 * @param titles
+	 */
+	private static void setTitleRow(Sheet sheet, String[] titles) {
+		// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+		Row header = sheet.createRow(0);
+		header.setHeightInPoints(25);
+		// 创建单元格并设置单元格内容
+		for (int i = 0, max = titles.length; i < max; i++) {
+			header.createCell(i).setCellValue(titles[i]);
+		}
+	}
+	
+	/**
+	 * 填充内容行
+	 * @param sheet
+	 * @param rowNum
+	 * @param map
+	 * @param fields
+	 * @param titles
+	 */
+	private static void setContentRows(Sheet sheet, int rowNum, Map<String, Object> map, String[] fields, String[] titles){
+		//sheet.autoSizeColumn(i,true);//中文还是不能实现宽度自适应
+		Row row = sheet.createRow(rowNum);
+		row.setHeightInPoints(20);
+		for (int j = 0, max = fields.length; j < max; j++) {
+			String value = String.valueOf(map.get(fields[j]));
+			String titleValue = titles[j];
+			int valueLength = value.getBytes().length;
+			int titleValueLength = titleValue.getBytes().length;
+//			int cellLength = (valueLength >= titleValueLength) ? valueLength : titleValueLength;
+			int cellLength = Math.max(valueLength, titleValueLength);
+			
+			//由于utf-8一个中文字符有3个长度
+			sheet.setColumnWidth(j,(cellLength + 3) * 256);//手动设置列宽
+			row.createCell(j).setCellValue(value);
+//			Cell cell = row.createCell(j);
+//			cell.setCellType(Cell.CELL_TYPE_STRING);
+//			cell.setCellValue(value);
 		}
 	}
 
