@@ -23,6 +23,10 @@ public class ExcelTest {
 	
 	@Test
 	public void write_test() throws IOException {
-		
+		String value = "null";
+//		String value = "test";
+//		String value = "测试账号";
+		int cellLength = value.getBytes().length;
+		System.out.println(cellLength);
 	}
 }

@@ -3,11 +3,15 @@ package com.shupro.core.utils.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +32,8 @@ import com.shupro.core.utils.SystemUtil;
 public class FileUtil {
 
 	/**
-	 * springmvc 文件上传(上传文件存放于download文件夹)
+	 * 文件上传(上传文件存放于upload文件夹) <br>
+	 * <input type="file" name="file">中的name不受限制
 	 * 
 	 * @param request
 	 * @param response
@@ -39,48 +44,49 @@ public class FileUtil {
 	 * 	</form>
 	 */
 	public static String upload(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// 这里我用到了jar包
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
-				request.getSession().getServletContext());
-		String newFileName = "";
-		if (multipartResolver.isMultipart(request)) {
-			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-
-			Iterator<String> iter = multiRequest.getFileNames();
-			while (iter.hasNext()) {
-				MultipartFile file = multiRequest.getFile((String) iter.next());
-				if (file != null) {
-					String fileName = file.getOriginalFilename();
-					String path = request.getSession().getServletContext().getRealPath("upload");
-					newFileName = SystemUtil.getNewFilename(fileName);
-					File targetFile = new File(path, newFileName);
-					if (!targetFile.exists()) {
-						targetFile.mkdirs();
-					}
-					file.transferTo(targetFile);
-				}
-			}
-		}
-		return newFileName;
+		
+		return upload(request, response, "upload", "");
 	}
 	
 	/**
-	 * 上传
+	 * 文件上传 <br>
+	 * <input type="file" name="file">中的name不受限制
+	 * 
+	 * @param request
+	 * @param response
+	 * @param savePath		本地保存文件夹位置
+	 * @return
+	 * @throws IOException
+	 * 	<form action="file/upload.do" method="post" enctype="multipart/form-data"> 
+	 * 		选择文件 <input type="file" name="file"> <input type="submit" value="上传"> 
+	 * 	</form>
+	 */
+	public static String upload(HttpServletRequest request, HttpServletResponse response, String savePath) throws IOException {
+		
+		return upload(request, response, savePath, "");
+	}
+	
+	/**
+	 * 文件上传 <br>
+	 * <input type="file" name="file">中的name不受限制
+	 * 
 	 * @param request
 	 * @param response
 	 * @param savePath		本地保存文件夹位置
 	 * @param namePrefix	文件名前缀
 	 * @return
 	 * @throws IOException
+	 * 	<form action="file/upload.do" method="post" enctype="multipart/form-data"> 
+	 * 		选择文件 <input type="file" name="file"> <input type="submit" value="上传"> 
+	 * 	</form>
 	 */
 	public static String upload(HttpServletRequest request, HttpServletResponse response, String savePath, String namePrefix) throws IOException {
-		// 这里我用到了jar包
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
 				request.getSession().getServletContext());
 		String newFileName = "";
 		if (multipartResolver.isMultipart(request)) {
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-			
+
 			Iterator<String> iter = multiRequest.getFileNames();
 			while (iter.hasNext()) {
 				MultipartFile file = multiRequest.getFile((String) iter.next());
@@ -102,43 +108,41 @@ public class FileUtil {
 	/**
 	 * 文件下载 
 	 * 
-	 * @param fileName
-	 *            需下载文件名
+	 * @param path 文件全路径
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String download(String savePath, String fileName, HttpServletRequest request, HttpServletResponse response)
-			throws UnsupportedEncodingException {
-		response.setCharacterEncoding("utf-8");
-		//response.setContentType(request.getSession().getServletContext().getMimeType(fileName));
-		response.setHeader("Content-Disposition","attachment;filename="+fileName);
-//		response.setHeader("Content-Disposition", "attachment;" + encodeFileName(request, fileName));
-		try {
-//			String path = Thread.currentThread().getContextClassLoader().getResource("").getPath() + savePath;
-			String path = request.getSession().getServletContext().getRealPath(savePath);
-			InputStream inputStream = new FileInputStream(
-					new File(path.replace("%20", " ") + File.separator + fileName));
+	public static String download(String path, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		int index = path.lastIndexOf("/") + 1;
+		String fileName = path.substring(index);
+		// String savePath = path.substring(0,index);
 
-			OutputStream os = response.getOutputStream();
-			byte[] b = new byte[2048];
-			int length;
-			while ((length = inputStream.read(b)) > 0) {
-				os.write(b, 0, length);
-			}
-			// 这里主要关闭。
-			os.close();
-			inputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		response.setCharacterEncoding("utf-8");
+		response.setContentType(request.getSession().getServletContext().getMimeType(fileName));
+		response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+		// response.setHeader("Content-Disposition", "attachment;" +
+		// encodeFileName(request, fileName));
+
+		// String path =
+		// request.getSession().getServletContext().getRealPath(savePath);
+		InputStream inputStream = new FileInputStream(new File(path.replace("%20", " ")));
+
+		OutputStream os = response.getOutputStream();
+		byte[] b = new byte[2048];
+		int length;
+		while ((length = inputStream.read(b)) > 0) {
+			os.write(b, 0, length);
 		}
-		// 返回值要注意，要不然就出现下面这句错误！
-		// java+getOutputStream() has already been called for this response
+		// 这里主要关闭。
+		os.close();
+		inputStream.close();
+
 		return null;
 	}
+	
 
 //	public static String encodeFileName(HttpServletRequest request, String fileName) {
 //
@@ -178,7 +182,6 @@ public class FileUtil {
 //			e.printStackTrace();
 //		}
 //
-//		
 //		if (agent.contains("Firefox")) { // 火狐浏览器
 //			filename = "=?UTF-8?B?"
 //					+ new BASE64Encoder().encode(filename.getBytes("utf-8"))

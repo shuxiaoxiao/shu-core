@@ -84,7 +84,7 @@ public class SystemUtil {
 	public static String getNewFilename(String oldFilename) {
 		String suffix = StringUtil.getSuffix(oldFilename);
 		if(suffix != null){
-			return getRandomId3(5) + suffix;
+			return getRandomId3(5) + "." + suffix;
 		}else{
 			return null;
 		}

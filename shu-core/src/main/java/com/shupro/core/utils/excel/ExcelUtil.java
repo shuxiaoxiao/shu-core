@@ -50,13 +50,10 @@ public class ExcelUtil {
 	 */
 	public static List<String[]> read(File file) throws IOException {
 		String filePath = file.getName();
-		// 前缀prefix，后缀suffix
-//		String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
-		String suffix = StringUtil.getSuffix(filePath);
 		// 创建输入流
 		InputStream inStream = new FileInputStream(file);
 
-		return read(suffix, inStream);
+		return read(filePath, inStream);
 	}
 	
 	/**
@@ -67,9 +64,12 @@ public class ExcelUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<String[]> read(String suffix, InputStream inStream) throws IOException {
+	public static List<String[]> read(String filePath, InputStream inStream) throws IOException {
 		// 创建一个list 用来存储读取的内容
 		List<String[]> list = new ArrayList<String[]>();
+		// 前缀prefix，后缀suffix
+//		String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
+		String suffix = StringUtil.getSuffix(filePath);
 		
 		Workbook workbook = createWorkbook(suffix, inStream);
 		if(workbook == null){
@@ -249,17 +249,17 @@ public class ExcelUtil {
 	 * 
 	 * @param excelInfo
 	 * @param response
+	 * @param isNeedPage 是否需要分sheet页
 	 * @throws IOException
 	 */
 	public static void export2Http(ExcelInfo excelInfo, HttpServletResponse response, boolean isNeedPage) throws IOException {
 		String fileName = excelInfo.getFileName();
 
-		// 输出Excel文件
-		OutputStream output = response.getOutputStream();
 		response.reset();
 //		response.setHeader("Content-disposition", "attachment; filename=" + fileName);
 		response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"), "ISO8859-1"));
 		response.setContentType("application/msexcel");
+		OutputStream output = response.getOutputStream();
 		
 		if(isNeedPage){
 			write2Page(excelInfo, output);
@@ -286,8 +286,8 @@ public class ExcelUtil {
 	/**
 	 * 填充内容行
 	 * @param sheet
-	 * @param rowNum
-	 * @param map
+	 * @param rowNum 行号
+	 * @param map	对象
 	 * @param fields
 	 * @param titles
 	 */

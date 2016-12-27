@@ -2,6 +2,7 @@ package com.shupro.core.utils;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.junit.Test;
 
 /**
  * MD5全名Message-Digest Algorithm 5（信息-摘要算法）是一种不可逆的加密算法。
@@ -27,20 +28,20 @@ public class Md5Test {
 //		Base64.
 	}
 	
+	@Test
 	public void test2() {
-//		String str = "test";
-//		String md5 = DigestUtils.md5Hex(str);
-//		System.out.println(md5.length());
-		//32位
-		//098f6bcd4621d373cade4e832627b4f6
-		String jiami = "098f6bcd4621d373cade4e832627b4f6";
-		if (jiami.equals(DigestUtils.md5Hex("test"))) {
-			System.out.println("success");
-		}else {
-			System.out.println("fail");
-		}
-			
+		String str = "token12";
+		System.out.println(str.substring(5));
 		
+//		//加密
+//		String str= "test,123"; // abc为要加密的字符串
+//		byte[] b = Base64.encodeBase64(str.getBytes(), true);
+//		System.out.println(new String(b));
+
+		//解密
+//		String decodeStr = "YWJj"; // YWJj为要解密的字符串
+//		byte[] b2 = Base64.decodeBase64(decodeStr.getBytes());
+//		System.out.println(new String(b2));
 		
 	}
 }
