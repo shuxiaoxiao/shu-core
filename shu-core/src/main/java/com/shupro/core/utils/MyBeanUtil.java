@@ -72,7 +72,8 @@ public class MyBeanUtil{
     }
 	
 	/**
-	 * 
+	 * Bean转成Map <br>
+	 * 不依赖BeanUtils工具类的实现
 	 * @param obj
 	 * @return
 	 */
@@ -106,9 +107,14 @@ public class MyBeanUtil{
     }  
 	
 	/**
-     * 暴力获取当前类声明的private/protected变量
-     */
-    static public Object getDeclaredProperty(Object object, String propertyName)
+	 * 暴力获取当前类声明的private/protected变量
+	 * @param object
+	 * @param propertyName
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws NoSuchFieldException
+	 */
+	public static Object getDeclaredProperty(Object object, String propertyName)
             throws IllegalAccessException, NoSuchFieldException {
         Field field = object.getClass().getDeclaredField(propertyName);
         return getDeclaredProperty(object, field);
@@ -117,7 +123,7 @@ public class MyBeanUtil{
     /**
      * 暴力获取当前类声明的private/protected变量
      */
-    static public Object getDeclaredProperty(Object object, Field field)
+	public static Object getDeclaredProperty(Object object, Field field)
             throws IllegalAccessException {
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
@@ -129,7 +135,7 @@ public class MyBeanUtil{
     /**
      * 暴力设置当前类声明的private/protected变量
      */
-    static public void setDeclaredProperty(Object object, String propertyName,
+    public static void setDeclaredProperty(Object object, String propertyName,
             Object newValue) throws IllegalAccessException,
             NoSuchFieldException {
         Field field = object.getClass().getDeclaredField(propertyName);
@@ -139,7 +145,7 @@ public class MyBeanUtil{
     /**
      * 暴力设置当前类声明的private/protected变量
      */
-    static public void setDeclaredProperty(Object object, Field field,
+    public static void setDeclaredProperty(Object object, Field field,
             Object newValue) throws IllegalAccessException {
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
@@ -150,7 +156,7 @@ public class MyBeanUtil{
     /**
      * 暴力调用当前类声明的private/protected函数
      */
-    static public Object invokePrivateMethod(Object object, String methodName,
+    public static Object invokePrivateMethod(Object object, String methodName,
             Object[] params) throws NoSuchMethodException,
             IllegalAccessException, InvocationTargetException {
         Class<?>[] types = new Class[params.length];
@@ -169,7 +175,7 @@ public class MyBeanUtil{
     /**
      * 按Filed的类型取得Field列表
      */
-    static public List<Object> getFieldsByType(Object object, Class<?> type) {
+    public static List<Object> getFieldsByType(Object object, Class<?> type) {
         ArrayList<Object> list = new ArrayList<Object>();
         Field[] fields = object.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {

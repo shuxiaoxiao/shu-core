@@ -21,7 +21,8 @@ public class ExcelInfo {
 	private String[] fields;
 	/** sheet中内容 */
 	private List<Map<String, Object>> list;
-	private int pageSize = 20; //Excel每个工作簿的行数
+	/** Excel每个工作簿的行数*/
+	private int pageSize = 20;
 
 	public ExcelInfo() {}
 

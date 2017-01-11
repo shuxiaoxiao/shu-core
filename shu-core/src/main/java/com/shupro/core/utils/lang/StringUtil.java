@@ -28,16 +28,16 @@ public class StringUtil {
 	}
 	
 	/**
-	 * 获得文件后缀,null表示无后缀
+	 * 获得文件后缀,null表示无后缀,如返回doc 或 xls等
 	 * @param str
 	 * @return
 	 */
 	public static String getSuffix(String str) {
 		int index = str.lastIndexOf(".");
 		if (index != -1) {
-			String suffix = str.substring(str.lastIndexOf(".")+1);
+			String suffix = str.substring(index + 1);
 			return suffix;
-		}else{
+		} else {
 			return null;
 		}
 	}
@@ -63,7 +63,7 @@ public class StringUtil {
 	}
 	
 	/**
-	 * 转换空串，如str是空串则转成num，不为空就是本身
+	 * 转换空串，如str是空串或null 则转成num，不为空就是本身
 	 * @param str
 	 * @param num
 	 * @return

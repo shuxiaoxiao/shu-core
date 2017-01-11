@@ -19,10 +19,10 @@ import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 public class JsonUtil {
 
 	private static SerializeConfig mapping = new SerializeConfig();
-	private static String dateFormat;
-	static {
-		dateFormat = "yyyy-MM-dd HH:mm:ss";
-	}
+//	private static String dateFormat;
+//	static {
+//		dateFormat = "yyyy-MM-dd HH:mm:ss";
+//	}
 
 //	/**
 //	 * bean转换json<br>
@@ -68,8 +68,8 @@ public class JsonUtil {
 	 * @param jsonStr
 	 * @return
 	 */
-	public static Map<String, Object> jsonStr2Map(String jsonStr) {
-		Map<String, Object> map = JSON.parseObject(jsonStr, Map.class);
+	public static Map jsonStr2Map(String jsonStr) {
+		Map map = JSON.parseObject(jsonStr, Map.class);
 		return map;
 	}
 	
@@ -91,8 +91,8 @@ public class JsonUtil {
 	 * @param jsonStr
 	 * @return
 	 */
-	public static List<Map<String, Object>> jsonStr2List(String jsonStr) {
-		List<Map<String, Object>> list = JSON.parseObject(jsonStr,new TypeReference<List>(){});
+	public static List<Map> jsonStr2List(String jsonStr) {
+		List<Map> list = JSON.parseObject(jsonStr,new TypeReference<List>(){});
 		return list;
 	}
 	

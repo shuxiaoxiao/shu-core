@@ -24,7 +24,7 @@ public class BigDecimalUtil {
 //	}
 	
 	/**
-	 * 加法
+	 * 加法, 如果num1, num2 有"" 或null已被转成0
 	 * 
 	 * @Title: add
 	 * @param @param num1 	第1个值的字符串表示形式
@@ -41,7 +41,7 @@ public class BigDecimalUtil {
 	}
 
 	/**
-	 * 减法
+	 * 减法, 如果num1, num2 有"" 或null已被转成0
 	 * 
 	 * @Title: subtract
 	 * @param @param num1 	第1个值的字符串表示形式
@@ -58,7 +58,7 @@ public class BigDecimalUtil {
 	}
 
 	/**
-	 * 乘法
+	 * 乘法, 如果num1, num2 有"" 或null已被转成0
 	 * 
 	 * @Title: multiply
 	 * @param @param num1	 第1个值的字符串表示形式
@@ -75,7 +75,7 @@ public class BigDecimalUtil {
 	}
 
 	/**
-	 * 除法
+	 * 除法, 如果num1 有"" 或null已被转成0, num2转成1
 	 * 
 	 * @Title: divide
 	 * @param @param num1 	第1个值的字符串表示形式

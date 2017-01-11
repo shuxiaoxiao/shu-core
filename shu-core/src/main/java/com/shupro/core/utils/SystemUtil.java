@@ -17,7 +17,20 @@ import com.shupro.core.utils.lang.StringUtil;
 public class SystemUtil {
 
 	/**
-	 * 获得32位长度的字符串
+	 * 获得36位长度的字符串, 里面包含字符 "-"
+	 * 
+	 * @Title: getUUId
+	 * @param @return 设定文件
+	 * @return String 返回类型
+	 */
+	public static String getUUId() {
+		// java.util.UUID 是jdk 提供的类
+		String str = java.util.UUID.randomUUID().toString();
+		return str;
+	}
+	
+	/**
+	 * 获得32位长度的字符串, 实际是将getUUId() 中的字符 "-"去掉后的结果
 	 * 
 	 * @Title: getUUId32
 	 * @param @return 设定文件
@@ -51,6 +64,7 @@ public class SystemUtil {
 	 * @return String    返回类型
 	 */
 	public static String getRandomId2(int length) {
+		
 		return DateUtil.today2YyMMddHHmmss() + MathUtil.random2(length);
 	}
 	
@@ -100,7 +114,7 @@ public class SystemUtil {
 		return str == null || str.trim().length() == 0;
 	}
 	/**
-	 * 判断是否不为null或非空串（去空格了），是返回 true
+	 * 判断str是否不为null或非空串（去空格了），是返回 true
 	 * @param str
 	 * @return
 	 */
@@ -117,7 +131,7 @@ public class SystemUtil {
 		return list == null || list.size() == 0;
 	}
 	/**
-	 * 判断是否不为null或非空串（去空格了），是返回 true
+	 * 判断list是否不为null或非空串（去空格了），是返回 true
 	 * @param str
 	 * @return
 	 */
@@ -126,7 +140,7 @@ public class SystemUtil {
 	}
 	
 	/**
-	 * 数组对象 是否为null或空,是返回 true
+	 * 判断数组对象 是否为null或空,是返回 true
 	 * @param list
 	 * @return
 	 */
@@ -134,7 +148,7 @@ public class SystemUtil {
 		return array == null || array.length == 0;
 	}
 	/**
-	 * 数组对象 是否不为null或非空串（去空格了），是返回 true
+	 * 判断数组对象 是否不为null或非空串（去空格了），是返回 true
 	 * @param str
 	 * @return
 	 */
@@ -143,7 +157,7 @@ public class SystemUtil {
 	}
 	
 	/**
-	 * map对象 是否为null或空,是返回 true
+	 * 判断map对象 是否为null或空,是返回 true
 	 * @param map
 	 * @return
 	 */
@@ -151,7 +165,7 @@ public class SystemUtil {
         return (map == null || map.isEmpty());
     }
     /**
-     * map对象 是否不为null或非空串（去空格了），是返回 true
+     * 判断map对象 是否不为null或非空,是返回 true
      * @param map
      * @return
      */

@@ -34,23 +34,65 @@ public class MathUtil {
 	}
 	
 	/**
-	 * 返回的几位数之间的值<br>
+	 * 返回的几位数之间的值, length范围 [1,10], 超出范围 <br>
 	 * 如length=1,返回[0, 10) 即0-9之间的值<br>
 	 * 如length=2,返回[10, 100) 即10-99之间的值<br>
 	 * 如length=3,返回[100, 1000) 即100-999之间的值<br>
 	 * 
 	 * @param @param length	几位数
 	 * @return int
+	 * @throws Exception 
 	 */
-	public static int random2(int length){
+	public static int randomMax10(int length) {
 		int start = 0;
-		if(length != 1){
-			//由于10^0 =1,所以单独处理
-			start = (int) Math.pow(10, (length - 1) );
+		int end = 0;
+		try {
+			if (length > 1 && length <= 10) {
+				// 由于10^0 =1,所以单独处理
+				start = (int) Math.pow(10, (length - 1));
+
+			} else {
+				throw new Exception("超过范围, length范围是[1,10]");
+			}
+			end = (int) Math.pow(10, length);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		int end = (int) Math.pow(10, length);
+
+		return (int) ((Math.random() * (end - start)) + start);
+
+	}
+	
+	/**
+	 * 返回的几位数之间的值, length范围 [1, +∞] <br>
+	 * 如length=1,返回[0, 10) 即0-9之间的值<br>
+	 * 如length=2,返回[10, 100) 即10-99之间的值<br>
+	 * 如length=3,返回[100, 1000) 即100-999之间的值<br>
+	 * 
+	 * @param @param length	几位数
+	 * @return int
+	 * @throws Exception 
+	 */
+	public static String random2(int length){
+		String randomId = "";
+		int restLength = 0;
+		if(length < 10){
+			restLength = length;
+		}else{
+			int count = length / 10;
+			for (int i = 0; i < count; i++) {
+				randomId = randomId + MathUtil.randomMax10(10);
+			}
+			//加上不满长度为10的部分
+			restLength = length - count * 10;
+		}
 		
-		return (int) (Math.random() * (end - start)) + start;
+		if(restLength != 0){
+			randomId = randomId + MathUtil.randomMax10(restLength);
+		}
+		
+		return randomId;
 	}
 	
 	/**

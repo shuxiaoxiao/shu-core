@@ -36,11 +36,10 @@ public class FtpUtil {
 		boolean result = false;
 		FTPClient ftp = new FTPClient();
 		try {
-			int reply;
 			ftp.connect(host, port);// 连接FTP服务器
 			// 如果采用默认端口，可以使用ftp.connect(host)的方式直接连接FTP服务器
 			ftp.login(username, password);// 登录
-			reply = ftp.getReplyCode();
+			int reply = ftp.getReplyCode();
 			if (!FTPReply.isPositiveCompletion(reply)) {
 				ftp.disconnect();
 				return result;
@@ -100,11 +99,10 @@ public class FtpUtil {
 		boolean result = false;
 		FTPClient ftp = new FTPClient();
 		try {
-			int reply;
 			ftp.connect(host, port);
 			// 如果采用默认端口，可以使用ftp.connect(host)的方式直接连接FTP服务器
 			ftp.login(username, password);// 登录
-			reply = ftp.getReplyCode();
+			int reply = ftp.getReplyCode();
 			if (!FTPReply.isPositiveCompletion(reply)) {
 				ftp.disconnect();
 				return result;
@@ -138,8 +136,8 @@ public class FtpUtil {
 	
 	public static void main(String[] args) {
 		try {  
-	        FileInputStream in=new FileInputStream(new File("D:\\temp\\image\\gaigeming.jpg"));  
-	        boolean flag = uploadFile("192.168.25.133", 21, "ftpuser", "ftpuser", "/home/ftpuser/www/images","/2015/01/21", "gaigeming.jpg", in);  
+	        FileInputStream input = new FileInputStream(new File("D:/temp/image/gaigeming.jpg"));  
+	        boolean flag = uploadFile("192.168.25.133", 21, "ftpuser", "ftpuser", "/home/ftpuser/www/images","/2015/01/21", "gaigeming.jpg", input);  
 	        System.out.println(flag);  
 	    } catch (FileNotFoundException e) {  
 	        e.printStackTrace();  

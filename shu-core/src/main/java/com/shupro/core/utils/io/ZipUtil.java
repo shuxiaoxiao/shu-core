@@ -30,9 +30,9 @@ public class ZipUtil {
 	/**
 	 * 打包压缩下载文件
 	 * 
-	 * @param fileList
-	 * @param outputStream
-	 * @param zipName
+	 * @param fileList	文件List
+	 * @param outputStream	输出
+	 * @param zipName	下载的zip文件名
 	 * @throws IOException
 	 */
 	public static void downLoadZipFile(List<File> fileList, OutputStream outputStream, String zipName)
@@ -58,9 +58,9 @@ public class ZipUtil {
 	/**
 	 * 打包压缩下载文件
 	 * 
-	 * @param fileList
+	 * @param fileList	文件List
 	 * @param response
-	 * @param zipName
+	 * @param zipName	下载的zip文件名
 	 * @throws IOException
 	 */
 	public static void downLoadZipFile(List<File> fileList, HttpServletResponse response, String zipName)

@@ -1,15 +1,44 @@
 package com.shupro.core.utils;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
-/**
- * MD5全名Message-Digest Algorithm 5（信息-摘要算法）是一种不可逆的加密算法。
- * @author Administrator
- *
- */
-public class Md5Test {
+import com.shupro.core.utils.digest.DigestUtil;
+
+public class DigestUtilTest {
+
+	@Test
+	public void md5_test() {
+		String str = "test";
+		String md5Str = DigestUtil.md5(str);
+		//32位,098f6bcd4621d373cade4e832627b4f6
+		System.out.println(md5Str);
+	}
+	
+	@Test
+	public void sha256_test() {
+		String str = "test";
+		String sha256Str = DigestUtil.sha256(str);
+		//64位,9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+		System.out.println(sha256Str);
+	}
+	
+	@Test
+	public void encodeBase64_test() {
+		String str = "test";
+		String base64Str = DigestUtil.encodeBase64(str);
+		//dGVzdA==
+		System.out.println(base64Str);
+	}
+	
+	@Test
+	public void decodeBase64_test() {
+		String str = "dGVzdA==";
+		String base64Str = DigestUtil.decodeBase64(str);
+		//test
+		System.out.println(base64Str);
+	}
+	
 
 	public void test1() {
 		String str = "test";
@@ -26,13 +55,6 @@ public class Md5Test {
 		System.out.println(sha1.length() +"位,"+sha1);
 		
 //		Base64.
-	}
-	
-	@Test
-	public void test2() {
-		String str = "token12";
-		System.out.println(str.substring(5));
-		
 //		//加密
 //		String str= "test,123"; // abc为要加密的字符串
 //		byte[] b = Base64.encodeBase64(str.getBytes(), true);
@@ -42,6 +64,5 @@ public class Md5Test {
 //		String decodeStr = "YWJj"; // YWJj为要解密的字符串
 //		byte[] b2 = Base64.decodeBase64(decodeStr.getBytes());
 //		System.out.println(new String(b2));
-		
 	}
 }

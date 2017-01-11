@@ -18,10 +18,10 @@ public class JdbcUtil {
 	
 	/**
 	 * 获得数据库的链接
-	 * @param driver
-	 * @param url
-	 * @param username
-	 * @param password
+	 * @param driver	驱动
+	 * @param url	数据库地址
+	 * @param username	用户名
+	 * @param password	密码
 	 * @return
 	 */
 	public static Connection getConn(String driver, String url, String username, String password) {

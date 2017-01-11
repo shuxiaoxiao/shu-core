@@ -16,6 +16,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * @author shuheng
  */
 public class DateUtil {
+	/**日期格式为yyyy-MM-dd HH:mm:ss.SSS*/
+	public static final String YMD_HMS_S ="yyyy-MM-dd HH:mm:ss.SSS";
 	/**日期格式为yyyy-MM-dd HH:mm:ss*/
 	public static final String YMD_HMS ="yyyy-MM-dd HH:mm:ss";
 	/**日期格式为yyyy-MM-dd*/
@@ -38,8 +40,8 @@ public class DateUtil {
 	public static final int MILLISECOND = 14;
 	 
 	/**
-	 * 将指定字符(String)串转换成日期 (Date),格式是yyyy-MM-dd HH:mm:ss<br/>
-	 * 如果发生错误，则返回 null。
+	 * 将指定字符(String)串转换成日期 (Date),格式是yyyy-MM-dd HH:mm:ss <br>
+	 * 如果发生错误，则返回 null, 格式不是yyyy-MM-dd HH:mm:ss也会返回null
 	 * 
 	 * @param dateStr	String 日期字符串
 	 * @return Date
@@ -88,16 +90,15 @@ public class DateUtil {
 	}
 	
 	/**
-	 * 将指定XML日期(XMLGregorianCalendar)对象转换成 格式化字符串 (String),格式是yyyy-MM-dd HH:mm:ss
+	 * 将指定XML日期(XMLGregorianCalendar)对象转换成 格式化字符串 (String),格式是yyyy-MM-dd HH:mm:ss.SSS
 	 * 
 	 * @param xmlDate	Date XML日期对象
 	 * @param datePattern	String 日期格式
 	 * @return String
 	 */
 	public static String xmlDateToStr(XMLGregorianCalendar xmlDate) {
-		SimpleDateFormat sd = new SimpleDateFormat(YMD_HMS);
-		Calendar calendar = xmlDate.toGregorianCalendar();
-		return sd.format(calendar.getTime());
+		return xmlDateToStr(xmlDate, YMD_HMS_S);
+//		return xmlDate.toString();//转成的格式是2017-01-10T10:54:36.647+08:00
 	}
 	
 	/**
@@ -120,7 +121,7 @@ public class DateUtil {
 	 * @return XMLGregorianCalendar
 	 */
 	public static XMLGregorianCalendar strToXmlDate(String dateStr) {
-		return dateToXmlDate(strToDate(dateStr, YMD_HMS));
+		return strToXmlDate(dateStr, YMD_HMS);
 	}
 	
 	/**
@@ -211,7 +212,10 @@ public class DateUtil {
 	}
 	
 	/**
-	 * time1与time2的时间差，返回单位是毫秒数
+	 * time1与time2的时间差，返回单位是毫秒数 <br>
+	 * 返回值大于0, 表示time1 > time2 
+	 * 返回值等于0, 表示time1 = time2 
+	 * 返回值小于0, 表示time1 < time2 
 	 * 
 	 * @param time1	当前时间
 	 * @param time2	比较时间
@@ -222,7 +226,7 @@ public class DateUtil {
 	}
 	
 	/**
-	 * time1与time2的时间差，没有type返回单位是毫秒数,设定了type则根据其返回<br/>
+	 * time1与time2的时间差,设定了type则根据其返回<br/>
 	 * 结果都是整型,默认的取整方式(向上取整),如0.6返回是0
 	 * @param time1	当前时间
 	 * @param time2	比较时间
@@ -323,6 +327,49 @@ public class DateUtil {
 		c.setTime(date);
 		return c.get(Calendar.MONTH) + 1;
 	}
+	
+	/**
+	 * 获取日期的天数
+	 * 
+	 * @param date	日期对象
+	 * @return
+	 */
+	public static int getDay(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		return c.get(Calendar.DATE);
+	}
+	
+	/**
+	 * 获取日期的星期(国际的记录方式), 周日为一周第一天,即 1 周日  2周一  7周六
+	 * 
+	 * @param date	日期对象
+	 * @return
+	 */
+	public static int getWeek(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		return c.get(Calendar.DAY_OF_WEEK);
+	}
+	
+	/**
+	 * 获取日期的星期 (中国的记录方式), 周一为一周第一天,即 1 周一  2周二  7周日
+	 * 
+	 * @param date	日期对象
+	 * @return
+	 */
+	public static int getWeek2Zh(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		int week = c.get(Calendar.DAY_OF_WEEK);
+		if(week == 1){
+			week = 7;
+		}else{
+			week --;
+		}
+		
+		return week;
+	}
 
 	/**
 	 * 判断日期 是不是周末,true表示是周末
@@ -340,25 +387,6 @@ public class DateUtil {
 			return true;
 		}
 		return false;
-	}
-	
-	/**
-	 * 获取当年指定月份第一天的字符串日期<br/>
-	 * 如"2016-6-6 10:10:10",指定为5月,返回"2016-5-1 0:00:00"
-	 * 
-	 * @param specifiedMonth	指定月份 
-	 * @param datePattern	日期格式 
-	 * @return
-	 */
-	public static String getFirstDayOfSpecifiedMonth(int specifiedMonth, String datePattern) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		c.set(Calendar.MONTH, specifiedMonth - 1);
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		return dateToStr(c.getTime(), datePattern);
 	}
 
 	/**
@@ -380,7 +408,7 @@ public class DateUtil {
 	 * @param date	日期对象
 	 * @return
 	 */
-	public static Date getStartTime(Date date) {
+	public static Date getStartTimeOfDate(Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.set(Calendar.HOUR_OF_DAY, 0);
@@ -397,7 +425,7 @@ public class DateUtil {
 	 * @param date	日期对象
 	 * @return
 	 */
-	public static Date getEndTime(Date date) {
+	public static Date getEndTimeOfDate(Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.set(Calendar.HOUR_OF_DAY, 24);
@@ -417,6 +445,37 @@ public class DateUtil {
 //	}
 	
 	/**
+	 * 获取某个日期指定月份第一天的日期<br/>
+	 * 如"2016-6-6 10:10:10",指定为5月,返回"2016-5-1 0:00:00"
+	 * 
+	 * @param specifiedMonth	指定月份 
+	 * @param datePattern	日期格式 
+	 * @return
+	 */
+	public static Date getFirstDayOfMonth(Date date, int specifiedMonth) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(Calendar.MONTH, specifiedMonth - 1);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		return c.getTime();
+	}
+	
+	/**
+	 * 获取当年指定月份第一天的日期<br/>
+	 * 如"2016-6-6 10:10:10",指定为5月,返回"2016-5-1 0:00:00"
+	 * 
+	 * @param specifiedMonth	指定月份 
+	 * @param datePattern	日期格式 
+	 * @return
+	 */
+	public static Date getFirstDayOfMonth(int specifiedMonth) {
+		return getFirstDayOfMonth(new Date(), specifiedMonth);
+	}
+	
+	/**
 	 * 获取某个日期该月的第一天<br/>
 	 * 如"2016-6-6 10:10:10",返回"2016-6-1 0:00:00"
 	 * 
@@ -431,6 +490,35 @@ public class DateUtil {
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		return c.getTime();
+	}
+	
+	/**
+	 * 获取某个日期该月的最后一天<br/>
+	 * 如"2016-6-6 10:10:10",返回"2016-6-30 23:59:59"
+	 * 
+	 * @param date	日期对象
+	 * @return
+	 */
+	public static Date getLastDayOfMonth(Date date, int specifiedMonth) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(Calendar.MONTH, specifiedMonth - 1);
+		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DATE));
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
+		return c.getTime();
+	}
+	
+	/**
+	 * 获取某个日期该月的最后一天<br/>
+	 * 如"2016-6-6 10:10:10",返回"2016-6-30 23:59:59"
+	 * 
+	 * @param date	日期对象
+	 * @return
+	 */
+	public static Date getLastDayOfMonth(int specifiedMonth) {
+		return getLastDayOfMonth(new Date(), specifiedMonth);
 	}
 	
 	/**

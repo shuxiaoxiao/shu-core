@@ -5,17 +5,26 @@ import java.util.List;
 import java.util.Properties;
 
 public class Mail {
-
-	private String mailServerHost;//发送邮件的服务器
-	private String username;//用户名
-	private String password;//密码
+	/** 发送邮件的服务器*/
+	private String mailServerHost;
+	/** 登陆邮件发送服务器的用户名 */
+	private String username;
+	/** 登陆邮件发送服务器的密码 */
+	private String password;
 	
+	/** 发件人邮箱地址 */
 	private String from;
+	/** 收件人邮箱地址 */
 	private StringBuilder toAddress;
+	/** 抄送人邮箱地址 */
 	private StringBuilder ccAddress;
+	/** 密送人（暗抄送）邮箱地址 */
 	private StringBuilder bccAddress;
+	/** 邮件主题 */
 	private String subject;
+	/** 邮件的文本内容 */
 	private String content;
+	/** 邮件附件的文件名 */
 	private List attachList;
 
 	public Properties getProperties() {  

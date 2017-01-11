@@ -28,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @ClassName: POIUtil
  * @author shuheng
  */
+@Deprecated
 public class ExcelUtil_old {
 //http://blog.csdn.net/huazhangena/article/details/7587731 详情页面
 	/**

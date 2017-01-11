@@ -1,4 +1,4 @@
-package com.shupro.core.utils;
+package com.shupro.core.utils.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,25 +13,7 @@ import org.junit.Test;
 import com.shupro.core.utils.io.ProperUtil;
 import com.shupro.core.utils.io.ZipUtil;
 
-public class IOTest {
-	
-	@Test
-	public void unzip() throws Exception {
-      String zipFilePath = "D:\\autotemp\\autotemp.zip";  
-      String unzipFilePath = "D:\\autotemp"; 
-		
-      ZipUtil.unzip(zipFilePath, unzipFilePath, true);  
-	}
-	
-	@Test
-	public void zip() throws Exception {
-		String dir = "D:\\autotemp";
-		String zipPath = "D:\\";
-		String zipFileName = "autotemp.zip";
-		
-		ZipUtil.zip(dir, zipPath, zipFileName);
-
-	}
+public class ProperUtilTest {
 	
 	@Test
 	public void properUtil_3() throws IOException {
