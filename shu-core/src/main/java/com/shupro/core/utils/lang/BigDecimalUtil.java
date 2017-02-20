@@ -9,8 +9,7 @@ import java.math.BigDecimal;
  * 利用double作为参数的构造函数，无法精确构造一个BigDecimal对象，需要自己指定一个上下文的环境，也就是指定精确位。
  * 而利用String对象作为参数传入的构造函数能精确的构造出一个BigDecimal对象。
  * 
- * @ClassName: BigDecimalUtil
- * @author shuheng
+ * @author shu
  */
 public class BigDecimalUtil {
 	static final String DEFAULT_VALUE = "0";

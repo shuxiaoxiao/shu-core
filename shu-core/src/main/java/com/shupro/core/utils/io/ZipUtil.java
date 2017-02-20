@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.shupro.core.utils.SystemUtil;
 
 /**
- * 文件上传下载工具类
+ * zip工具类（压缩，解压）
  * 
- * @author Administrator
+ * @author shu
  *
  */
 public class ZipUtil {

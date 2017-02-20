@@ -3,6 +3,11 @@ package com.shupro.core.utils.db;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+/**
+ * spring工具类，主要是为了进行单元测试
+ * @author shu
+ *
+ */
 public class SpringUtil {
 
 	/**

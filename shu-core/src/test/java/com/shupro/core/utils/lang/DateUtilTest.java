@@ -12,6 +12,16 @@ import org.junit.Test;
 public class DateUtilTest {
 
 	@Test
+	public void addDay_test1() {
+		//后一天
+		Date date1 = DateUtil.addDay(1);
+		System.out.println(DateUtil.dateToStr(date1));
+		//前一天
+		Date date2 = DateUtil.addDay(-1);
+		System.out.println(DateUtil.dateToStr(date2));
+	}
+	
+	@Test
 	public void getDate_test1() throws DatatypeConfigurationException {
 		Date date = new Date();//2017-01-10 15:10:10  周二 
 		//2017-2-1 0:00:00
@@ -121,6 +131,20 @@ public class DateUtilTest {
 		System.out.println(xgcal);//2017-01-10T11:26:05.728+08:00
 		String dateStr = DateUtil.xmlDateToStr(xgcal, "yyyy-MM-dd HH:mm:ss");
 		System.out.println(dateStr);//2017-01-10 11:26:05
+	}
+	
+	@Test
+	public void timestampToDate_test2() {
+		long timestamp = System.currentTimeMillis();
+		Date date = DateUtil.timestampToDate(timestamp, "yyyy-MM-dd");
+		System.out.println(date);//Wed Jan 18 00:00:00 CST 2017
+	}
+	
+	@Test
+	public void timestampToDate_test1() {
+		long timestamp = System.currentTimeMillis();
+		Date date = DateUtil.timestampToDate(timestamp);
+		System.out.println(date);//Wed Jan 18 11:31:18 CST 2017
 	}
 	
 	@Test

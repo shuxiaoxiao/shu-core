@@ -2,12 +2,33 @@ package com.shupro.core.utils.jmail;
 
 import java.io.File;
 
+/**
+ * mail 附件bean
+ * @author shu
+ *
+ */
 public class AttachBean {
-
+	/** 发送邮件的服务器*/
 	private String cid;
+	/** 发送邮件的服务器*/
 	private File file;
+	/** 邮件附件名*/
 	private String fileName;
+	/** 邮件附件绝对路径*/
+	private String fileSource;
 
+	public AttachBean() {}
+
+	public AttachBean(File file, String fileName) {
+		this.file = file;
+		this.fileName = fileName;
+	}
+	
+	public AttachBean(String fileName, String fileSource) {
+		this.fileName = fileName;
+		this.fileSource = fileSource;
+	}
+	
 	public String getCid() {
 		return cid;
 	}
@@ -32,11 +53,12 @@ public class AttachBean {
 		this.fileName = fileName;
 	}
 
-	public AttachBean() {
+	public String getFileSource() {
+		return fileSource;
 	}
 
-	public AttachBean(File file, String fileName) {
-		this.file = file;
-		this.fileName = fileName;
+	public void setFileSource(String fileSource) {
+		this.fileSource = fileSource;
 	}
+
 }

@@ -23,8 +23,7 @@ import org.slf4j.LoggerFactory;
 /**
  * mybatis分页插件
  * 
- * @ClassName MyBatisPagePlugin 
- * @author shuheng
+ * @author shu
  */
 @Intercepts({@Signature(type=StatementHandler.class,method="prepare",args={Connection.class})})
 public class MyBatisPagePlugin implements Interceptor{

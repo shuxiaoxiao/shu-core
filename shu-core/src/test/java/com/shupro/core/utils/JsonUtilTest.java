@@ -1,6 +1,7 @@
 package com.shupro.core.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -26,6 +27,18 @@ public class JsonUtilTest {
 		Map map = JsonUtil.jsonStr2Map(jsonStr);
 		//{key2=val2, key1=val1}
 		System.out.println(map);
+	}
+	
+	@Test
+	public void test() {
+		String jsonStr = "{\"companyId\":1,\"detailsList\":[{\"goodId\":2,\"goodQuantity\":2,\"goodPrice\":20,\"actualPrice\":50}],\"totalMoney\":40,\"deliveryFee\":0,\"deliveryId\":3}";
+		Orders orders = JsonUtil.jsonStr2Obj(jsonStr, Orders.class);
+		System.out.println(orders);
+		List<OrdersDetails> list = orders.getDetailsList();
+		System.out.println(list);
+		for (OrdersDetails ordersDetails : list) {
+			System.out.println(ordersDetails);
+		}
 	}
 
 }

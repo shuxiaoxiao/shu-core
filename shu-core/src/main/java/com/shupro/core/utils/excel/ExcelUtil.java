@@ -21,12 +21,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.shupro.core.utils.lang.StringUtil;
 
 /**
- * 
- * @ClassName: POIUtil
- * @author shuheng
+ * 基于poi的excel工具类
+ * @author shu
  */
 public class ExcelUtil {
-//http://blog.csdn.net/huazhangena/article/details/7587731 详情页面
 	
 	/**
 	 * 读取excel 原理：一行一行读取内容，保存到List<String[]>中
@@ -49,27 +47,27 @@ public class ExcelUtil {
 	 * @throws IOException
 	 */
 	public static List<String[]> read(File file) throws IOException {
-		String filePath = file.getName();
+		String fileName = file.getName();
 		// 创建输入流
 		InputStream inStream = new FileInputStream(file);
 
-		return read(filePath, inStream);
+		return read(fileName, inStream);
 	}
 	
 	/**
 	 * 读取excel 原理：一行一行读取内容，保存到List<String[]>中
 	 * 
-	 * @param suffix 	文件名后缀
+	 * @param fileName 	文件名,主要是为了后缀名
 	 * @param inStream 	需要读取的流
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<String[]> read(String filePath, InputStream inStream) throws IOException {
+	public static List<String[]> read(String fileName, InputStream inStream) throws IOException {
 		// 创建一个list 用来存储读取的内容
 		List<String[]> list = new ArrayList<String[]>();
 		// 前缀prefix，后缀suffix
 //		String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
-		String suffix = StringUtil.getSuffix(filePath);
+		String suffix = StringUtil.getSuffix(fileName);
 		
 		Workbook workbook = createWorkbook(suffix, inStream);
 		if(workbook == null){

@@ -21,7 +21,7 @@ import com.shupro.core.utils.SystemUtil;
 /**
  * 文件上传下载工具类
  * 
- * @author Administrator
+ * @author shu
  *
  */
 public class FileUtil {

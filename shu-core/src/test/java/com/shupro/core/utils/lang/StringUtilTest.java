@@ -1,7 +1,5 @@
 package com.shupro.core.utils.lang;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class StringUtilTest {

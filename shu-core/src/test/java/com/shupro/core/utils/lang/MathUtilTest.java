@@ -10,11 +10,11 @@ public class MathUtilTest {
 	public void test() {
 		int num2_1 = MathUtil.random(100);// [0, 100)即[0, 99]
 		int num2_2 = MathUtil.random(10,99);//	[10, 99]
-		String num2_3 = MathUtil.random2(2);//	[10, 100)即[10, 99]
+		int num2_3 = MathUtil.randomMaxLength10(2);//	[10, 100)即[10, 99]
 		
 		int num3_1 = MathUtil.random(1000);// [0, 1000)即[0, 999]
 		int num3_2 = MathUtil.random(100,999);//	[100, 999]
-		String num3_3 = MathUtil.random2(3);//	[10, 100)即[100, 999]
+		int num3_3 = MathUtil.randomMaxLength10(3);//	[10, 100)即[100, 999]
 		
 		System.out.println(num2_1);
 		System.out.println(num2_2);

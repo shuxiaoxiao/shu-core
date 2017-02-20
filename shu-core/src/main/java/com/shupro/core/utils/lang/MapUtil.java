@@ -9,8 +9,8 @@ import java.util.Set;
 
 /**
  * map的常用操作，map与bean的转换见MyBeanUtil
- * @author shu
  *
+ * @author shu
  */
 public class MapUtil {
 	
@@ -20,8 +20,8 @@ public class MapUtil {
 	 * Collections.sort(list),不能对进行排序set(通过循环将key放入list，然后排序)
 	 * @param map
 	 */
-	public static String getMinKey(Map<String, ?> map) {
-		Set<String> set = map.keySet();
+	public static String getMinKey(Map map) {
+		Set set = map.keySet();
 		Object[] obj = set.toArray();
 		Arrays.sort(obj);
 		
@@ -34,7 +34,7 @@ public class MapUtil {
 	 * Collections.sort(list),不能对进行排序set(通过循环将key放入list，然后排序)
 	 * @param map
 	 */
-	public static String getMaxKey(Map<String, ?> map) {
+	public static String getMaxKey(Map map) {
 		Set<String> set = map.keySet();
 		Object[] obj = set.toArray();
 		Arrays.sort(obj);
@@ -116,23 +116,29 @@ public class MapUtil {
 	}
 	
 	/**
-	 * 通过value 获得key, 如果有多个key返回, 用逗号隔开。格式是key1,key2
+	 * 通过value 获得key, 
+	 * 如果未找到对应值, 返回""  
+	 * 如果有多个key返回, 用逗号隔开。格式是key1,key2
 	 * @param map
 	 * @param value
 	 * @return
 	 */
-	public static String getKey(Map<String, ?> map, String value) {
+	public static String getKey(Map map, String value) {
 		String returnKey = "";
 		//方便理解的map循环
-		Set<String> set = map.keySet();
-		for(String key : set) {
+		Set set = map.keySet();
+		for(Object key : set) {
 			String mapValue = map.get(key).toString();
 			if (mapValue.equals(value)) {
 				returnKey = returnKey + "," + key;
 			}
 		}
+		//截取多余的逗号，排查没有找到的情况
+		if(StringUtil.isNotEmpty(returnKey)){
+			returnKey = returnKey.substring(1);
+		}
 		
-		return returnKey.substring(1);
+		return returnKey;
 	}
 	
 	//方式1：键找值

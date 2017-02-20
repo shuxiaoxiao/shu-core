@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * 邮件bean，包含发送，抄送，暗送，邮件标题，内容等
+ * @author shu
+ *
+ */
 public class Mail {
 	/** 发送邮件的服务器*/
 	private String mailServerHost;
@@ -14,18 +19,19 @@ public class Mail {
 	
 	/** 发件人邮箱地址 */
 	private String from;
-	/** 收件人邮箱地址 */
+	/** 收件人邮箱地址, 多个用逗号隔开 */
 	private StringBuilder toAddress;
-	/** 抄送人邮箱地址 */
+	/** 抄送人邮箱地址, 多个用逗号隔开 */
 	private StringBuilder ccAddress;
-	/** 密送人（暗抄送）邮箱地址 */
+	/** 密送人（暗抄送）邮箱地址, 多个用逗号隔开 */
 	private StringBuilder bccAddress;
 	/** 邮件主题 */
 	private String subject;
 	/** 邮件的文本内容 */
 	private String content;
 	/** 邮件附件的文件名 */
-	private List attachList;
+	private List<AttachBean> attachList;
+//	private String filenames;
 
 	public Properties getProperties() {  
 		  Properties p = new Properties();  
@@ -35,27 +41,27 @@ public class Mail {
 		  return p; 
 	 }
 	
-//	public Mail() {
-//		toAddress = new StringBuilder();
-//		ccAddress = new StringBuilder();
-//		bccAddress = new StringBuilder();
-//		attachList = new ArrayList();
-//	}
-//
-//	public Mail(String from, String to) {
-//		this(from, to, null, null);
-//	}
-//
-//	public Mail(String from, String to, String subject, String content) {
-//		toAddress = new StringBuilder();
-//		ccAddress = new StringBuilder();
-//		bccAddress = new StringBuilder();
-//		attachList = new ArrayList();
-//		this.from = from;
-//		toAddress.append(to);
-//		this.subject = subject;
-//		this.content = content;
-//	}
+	public Mail() {
+		toAddress = new StringBuilder();
+		ccAddress = new StringBuilder();
+		bccAddress = new StringBuilder();
+		attachList = new ArrayList<>();
+	}
+
+	public Mail(String from, String to) {
+		this(from, to, null, null);
+	}
+
+	public Mail(String from, String to, String subject, String content) {
+		toAddress = new StringBuilder();
+		ccAddress = new StringBuilder();
+		bccAddress = new StringBuilder();
+		attachList = new ArrayList<>();
+		this.from = from;
+		toAddress.append(to);
+		this.subject = subject;
+		this.content = content;
+	}
 
 	public void setFrom(String from) {
 		this.from = from;
@@ -124,22 +130,30 @@ public class Mail {
 	}
 
 	public void addCcAddress(String cc) {
-		if (ccAddress.length() > 0)
+		if (ccAddress.length() > 0){
 			ccAddress.append(",");
-		ccAddress.append(cc);
+		}
+		
+		if (null != cc){
+			ccAddress.append(cc);
+		}
 	}
 
 	public void addBccAddress(String bcc) {
-		if (bccAddress.length() > 0)
+		if (bccAddress.length() > 0){
 			bccAddress.append(",");
-		bccAddress.append(bcc);
+		}
+			
+		if (null != bcc){
+			bccAddress.append(bcc);
+		}
 	}
 
 	public void addAttach(AttachBean attachBean) {
 		attachList.add(attachBean);
 	}
 
-	public List getAttachs() {
+	public List<AttachBean> getAttachs() {
 		return attachList;
 	}
 }

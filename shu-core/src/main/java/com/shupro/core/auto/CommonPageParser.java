@@ -8,10 +8,7 @@ import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 
 public class CommonPageParser {

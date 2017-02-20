@@ -1,4 +1,4 @@
-package com.shupro.core.utils.lang3;
+package com.shupro.core.mydemo.lang3;
 
 import java.io.Serializable;
 import java.util.ArrayList;

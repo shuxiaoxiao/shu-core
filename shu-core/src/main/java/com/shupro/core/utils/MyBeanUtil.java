@@ -19,14 +19,19 @@ import org.apache.commons.lang3.StringUtils;
 import com.shupro.core.utils.lang.StringUtil;
 
 /**
+ * bean的工具类
+ * javaBean与Map<String,Object>互转利用到了java的内省（Introspector）和反射（reflect）机制。 
+ * 其思路为： 
+ * 	通过类 Introspector 来获取某个对象的 BeanInfo 信息，
+ * 	然后通过 BeanInfo 来获取属性的描述器PropertyDescriptor，
+ * 	再利用属性描述器获取某个属性对应的 getter/setter 方法，
+ * 	然后通过反射机制来getter和setter。
  * 
- * BeanUtils.populate(obj, map); Map转成Bean
- * BeanUtils.copyProperties(dest, orig); Bean的复制
  * @author shu
- * http://blog.csdn.net/cuidiwhere/article/details/8130434
- * http://www.oschina.net/code/snippet_1864608_37795
  */
 public class MyBeanUtil{
+//	http://www.oschina.net/code/snippet_1864608_37795
+//	http://blog.csdn.net/cuidiwhere/article/details/8130434
 	
 	/**
 	 * 请求参数转换为map
@@ -45,14 +50,15 @@ public class MyBeanUtil{
 	}
 	
 	/**
-	 * Map转成Bean <br>
-	 * 不依赖BeanUtils工具类的实现
-	 * javaBean与Map<String,Object>互转利用到了java的内省（ Introspector ）和反射（reflect）机制。 其思路为： 通过类 Introspector 来获取某个对象的 BeanInfo 信息，然后通过 BeanInfo 来获取属性的描述器PropertyDescriptor，再利用属性描述器获取某个属性对应的 getter/setter 方法，然后通过反射机制来getter和setter。
+	 * Map转成Bean(不依赖BeanUtils工具类的实现) <br>
+	 * 依赖第三方工具类这样使用 BeanUtils.populate(obj, map); Map转成Bean 
+	 * 	BeanUtils.copyProperties(dest, orig); Bean的复制
 	 * @param map
 	 * @param obj
 	 */
 	public static void transMap2Bean(Map<String, Object> map, Object obj) {  
         try {
+        	//javaBean与Map<String,Object>互转利用到了java的内省（ Introspector ）和反射（reflect）机制。 其思路为： 通过类 Introspector 来获取某个对象的 BeanInfo 信息，然后通过 BeanInfo 来获取属性的描述器PropertyDescriptor，再利用属性描述器获取某个属性对应的 getter/setter 方法，然后通过反射机制来getter和setter。
             BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());  
             PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();  
   
@@ -72,10 +78,8 @@ public class MyBeanUtil{
     }
 	
 	/**
-	 * Bean转成Map <br>
-	 * 不依赖BeanUtils工具类的实现
+	 * Bean转成Map(不依赖BeanUtils工具类的实现) <br>
 	 * @param obj
-	 * @return
 	 */
 	public static Map<String, Object> transBean2Map(Object obj) {  
 		  

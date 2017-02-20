@@ -5,8 +5,7 @@ import java.util.List;
 /**
  * 分页类
  * 
- * @ClassName PageBean 
- * @author shuheng
+ * @author shu
  * @param <T> 泛型
  */
 public class PageBean<T> {

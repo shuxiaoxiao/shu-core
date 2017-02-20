@@ -14,7 +14,7 @@ import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
  * 阿里巴巴的FastJson
  * 
  * @ClassName: JsonUtil
- * @author shuheng
+ * @author shu
  */
 public class JsonUtil {
 

@@ -13,8 +13,7 @@ import com.google.gson.reflect.TypeToken;
  * Google的Gson
  * 
  * @ClassName: GsonUtil
- * @author shuheng
- * @date 2015-12-9 <br>
+ * @author shu
  * Gson类：解析json的最基础的工具类<br>
  *       JsonParser类：解析器来解析<br>
  *       JSON到JsonElements的解析树 <br>

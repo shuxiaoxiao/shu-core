@@ -17,16 +17,20 @@ public class SystemUtilTest {
 	
 	@Test
 	public void getRandomId_test() {
+		//32位：17011910161513845271701830725454
 		String randomId1 = SystemUtil.getRandomId2();
+		//37位：1701191016151314756505125288145395978
 		String randomId2 = SystemUtil.getRandomId2(25);
 		
+		//32位：17011910161534619773494472961210
 		String randomId3 = SystemUtil.getRandomId3();
+		//40位：1701191016153461114856486186800356197591
 		String randomId4 = SystemUtil.getRandomId3(25);
 		
-		System.out.println(randomId1.length() + ":" + randomId1);
-		System.out.println(randomId2.length() + ":" + randomId2);
-		System.out.println(randomId3.length() + ":" + randomId3);
-		System.out.println(randomId4.length() + ":" + randomId4);
+		System.out.println(randomId1.length() + "位：" + randomId1);
+		System.out.println(randomId2.length() + "位：" + randomId2);
+		System.out.println(randomId3.length() + "位：" + randomId3);
+		System.out.println(randomId4.length() + "位：" + randomId4);
 	}
 	
 	@Test

@@ -12,8 +12,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * Date工具类 Date 、String 、XMLGregorianCalendar 3种类型的转换<br/>
  * 以及日期的常见操作,底层依赖的是java.util.Calendar
  * 
- * @ClassName: DateUtil
- * @author shuheng
+ * @author shu
  */
 public class DateUtil {
 	/**日期格式为yyyy-MM-dd HH:mm:ss.SSS*/
@@ -90,10 +89,30 @@ public class DateUtil {
 	}
 	
 	/**
+	 * 将指定时间戳(timestamp) 转换成 格式化日期(Date),格式是yyyy-MM-dd HH:mm:ss
+	 * @param timestamp
+	 * @return
+	 */
+	public static Date timestampToDate(long timestamp){
+		return timestampToDate(timestamp, YMD_HMS);
+	}
+	
+	/**
+	 * 将指定时间戳(timestamp) 转换成 格式化日期(Date)
+	 * @param timestamp		时间戳
+	 * @param datePattern	日期格式
+	 * @return
+	 */
+	public static Date timestampToDate(long timestamp, String datePattern){
+		SimpleDateFormat sd = new SimpleDateFormat(datePattern);
+		String dateStr = sd.format(timestamp);
+		return sd.parse(dateStr, new java.text.ParsePosition(0));
+	}
+	
+	/**
 	 * 将指定XML日期(XMLGregorianCalendar)对象转换成 格式化字符串 (String),格式是yyyy-MM-dd HH:mm:ss.SSS
 	 * 
 	 * @param xmlDate	Date XML日期对象
-	 * @param datePattern	String 日期格式
 	 * @return String
 	 */
 	public static String xmlDateToStr(XMLGregorianCalendar xmlDate) {
@@ -388,6 +407,26 @@ public class DateUtil {
 		}
 		return false;
 	}
+	
+	/**
+	 * 当前日期增加days天
+	 * @param days
+	 */
+	public static Date addDay(int days) {
+		return addDay(new Date(), days);
+	}
+	
+	/**
+	 * 指定date 增加days天
+	 * @param date
+	 * @param days
+	 */
+	public static Date addDay(Date date, int days) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DAY_OF_MONTH, days);
+		return c.getTime();
+	}
 
 	/**
 	 * 获取某个日期该月有多少天
@@ -448,8 +487,8 @@ public class DateUtil {
 	 * 获取某个日期指定月份第一天的日期<br/>
 	 * 如"2016-6-6 10:10:10",指定为5月,返回"2016-5-1 0:00:00"
 	 * 
+	 * @param date	指定日期
 	 * @param specifiedMonth	指定月份 
-	 * @param datePattern	日期格式 
 	 * @return
 	 */
 	public static Date getFirstDayOfMonth(Date date, int specifiedMonth) {
@@ -468,7 +507,6 @@ public class DateUtil {
 	 * 如"2016-6-6 10:10:10",指定为5月,返回"2016-5-1 0:00:00"
 	 * 
 	 * @param specifiedMonth	指定月份 
-	 * @param datePattern	日期格式 
 	 * @return
 	 */
 	public static Date getFirstDayOfMonth(int specifiedMonth) {

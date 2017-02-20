@@ -14,6 +14,14 @@ import com.shupro.core.utils.lang.StringUtil;
 public class MyTest1 {
 
 	@Test
+	public void test3() {
+		double a = 2.8 /100;
+		double money = 10000;
+		double shouyi = money * a /360;
+		System.out.println(shouyi);
+	}
+	
+	@Test
 	public void test2() {
 //		long num = (long) Math.pow(2, 3);
 		long num = (long) Math.pow(2017, 2017);

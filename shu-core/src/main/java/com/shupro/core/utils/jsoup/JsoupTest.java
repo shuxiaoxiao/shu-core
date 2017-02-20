@@ -3,7 +3,6 @@ package com.shupro.core.utils.jsoup;
 import java.util.List;
 
 
-
 public class JsoupTest {
 
 	public void getDatasByClass() {

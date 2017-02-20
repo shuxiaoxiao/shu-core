@@ -67,10 +67,22 @@ public class AutoCreateClassUtil {
 	
 	/**
 	 * war部分代码生成，注意表字段需要添加中文注释<br>
+	 * 模板默认是easyUI
 	 * 
 	 * @param autoModel
 	 */
-	public static void generate2EasyuiWar(AutoModel autoModel) {
+	public static void generate2War(AutoModel autoModel) {
+		String templateRoot = "/template2Easyui";
+		generate2War(autoModel, templateRoot);
+	}
+		
+	/**
+	 * war部分代码生成，注意表字段需要添加中文注释<br>
+	 * 
+	 * @param autoModel
+	 * @param templateRoot 模板目录名，如 template2Easyui 
+	 */
+	public static void generate2War(AutoModel autoModel, String templateRoot) {
 		CreateBean createBean = new CreateBean(autoModel.getDiver(), autoModel.getJdbcUrl(), autoModel.getUsername(),
 				autoModel.getPassword(), autoModel.getDatabaseName());
 		
@@ -104,7 +116,6 @@ public class AutoCreateClassUtil {
 			e.printStackTrace();
 		}
 		
-		String templateRoot = "/template2Easyui";
 		CommonPageParser.WriterPage(root, templateRoot, "ControllerTemplate.ftl", pckPath, controllerPath);
 		CommonPageParser.WriterPage(root, templateRoot, "jspTemplate.ftl", jspSrcPath, jspPath);
 		

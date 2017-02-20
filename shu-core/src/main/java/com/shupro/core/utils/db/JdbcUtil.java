@@ -22,7 +22,6 @@ public class JdbcUtil {
 	 * @param url	数据库地址
 	 * @param username	用户名
 	 * @param password	密码
-	 * @return
 	 */
 	public static Connection getConn(String driver, String url, String username, String password) {
 		Connection connection = null;

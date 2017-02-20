@@ -30,8 +30,7 @@ import jxl.write.WriteException;
 /**
  * 使用jxl读写excel，只支持读取 03版本(.xls)
  * 
- * @ClassName: JXLUtil
- * @author shuheng
+ * @author shu
  */
 public class JXLUtil {
 	

@@ -10,8 +10,7 @@ import org.redisson.RedissonClient;
 /**
  * redis工具类-redisson
  *
- * @ClassName: RedissonUtil
- * @author	shuheng
+ * @author	shu
  */
 public class RedissonUtil {
 

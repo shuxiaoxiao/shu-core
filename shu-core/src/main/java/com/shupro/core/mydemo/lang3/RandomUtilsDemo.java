@@ -1,4 +1,4 @@
-package com.shupro.core.utils.lang3;
+package com.shupro.core.mydemo.lang3;
 
 import org.apache.commons.lang3.RandomUtils;
 

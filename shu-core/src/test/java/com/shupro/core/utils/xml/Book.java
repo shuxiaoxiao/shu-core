@@ -1,4 +1,6 @@
-package com.shupro.core.utils.xml.model;
+package com.shupro.core.utils.xml;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 自定义对象 --JavaBean <br>
@@ -7,6 +9,7 @@ package com.shupro.core.utils.xml.model;
  * 
  * alt + shift + s
  */
+@XStreamAlias("book")
 public class Book {
 
 	private String id;

@@ -13,6 +13,7 @@ public class MapUtilTest {
 
 	Map<String, String> map;
 	Map<String, Double> map2;
+	Map<Integer , String> intMap;
 	
 	@Before
 	public void init() {
@@ -30,6 +31,13 @@ public class MapUtilTest {
 		map2.put("k3", 60.3);
 		map2.put("k4", 55.3);
 		map2.put("k5", 100d);
+		
+		intMap = new HashMap<>();
+		intMap.put(1, "55");
+		intMap.put(2, "40d");
+		intMap.put(3, "60.3");
+		intMap.put(4, "55");
+		intMap.put(5, "100d");
 	}
 	
 	@Test
@@ -40,9 +48,16 @@ public class MapUtilTest {
 	}
 	
 	@Test
-	public void getKey_test() {
-		String value = "40";
+	public void getKey_test2() {
+		String value = "55";
 		String key = MapUtil.getKey(map, value);
+		System.out.println(key);//k2,k6
+	}
+	
+	@Test
+	public void getKey_test() {
+		String value = "55";
+		String key = MapUtil.getKey(intMap, value);
 		System.out.println(key);//k2,k6
 	}
 	

@@ -15,5 +15,8 @@ public class MyConstant {
 	public static final String SEX_MEN ="1";
 	/**性别：女*/
 	public static final String SEX_WOMEN ="2";
+	
+	/**模板目录名：easyui*/
+	public static final String TEMPLATE_EASYUI ="template2Easyui";
 
 }

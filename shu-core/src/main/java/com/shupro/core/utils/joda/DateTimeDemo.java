@@ -13,7 +13,7 @@ import org.joda.time.DateTime.Property;
  * 局部性（Partial）<br>
  * 年表（Chronology）<br>
  * 时区（Time zone）<br>
- * @author Administrator
+ * @author shu
  *
  */
 public class DateTimeDemo {

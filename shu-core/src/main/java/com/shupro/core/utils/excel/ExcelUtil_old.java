@@ -24,9 +24,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
- * 
- * @ClassName: POIUtil
- * @author shuheng
+ * 基于poi的excel工具类
+ * @author shu
  */
 @Deprecated
 public class ExcelUtil_old {

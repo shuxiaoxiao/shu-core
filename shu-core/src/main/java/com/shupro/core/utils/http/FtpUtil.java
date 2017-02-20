@@ -16,6 +16,7 @@ import org.apache.commons.net.ftp.FTPReply;
 /**
  * ftp上传下载工具类 <br>
  * 存在根路径（basePath）后，里面进行日期分类下
+ * @author shu
  */
 public class FtpUtil {
 

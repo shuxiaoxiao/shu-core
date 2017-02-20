@@ -6,8 +6,7 @@ import java.util.List;
 /**
  * 数学工具类，如随机数、幂计算等
  *
- * @ClassName: MathUtil
- * @author	shuheng
+ * @author	shu
  */
 public class MathUtil {
 
@@ -43,7 +42,7 @@ public class MathUtil {
 	 * @return int
 	 * @throws Exception 
 	 */
-	public static int randomMax10(int length) {
+	public static int randomMaxLength10(int length) {
 		int start = 0;
 		int end = 0;
 		try {
@@ -82,14 +81,14 @@ public class MathUtil {
 		}else{
 			int count = length / 10;
 			for (int i = 0; i < count; i++) {
-				randomId = randomId + MathUtil.randomMax10(10);
+				randomId = randomId + MathUtil.randomMaxLength10(10);
 			}
 			//加上不满长度为10的部分
 			restLength = length - count * 10;
 		}
 		
 		if(restLength != 0){
-			randomId = randomId + MathUtil.randomMax10(restLength);
+			randomId = randomId + MathUtil.randomMaxLength10(restLength);
 		}
 		
 		return randomId;
